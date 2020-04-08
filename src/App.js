@@ -1,20 +1,18 @@
-import "./App.css";
-
 import { AppBar, Button, Toolbar } from "@material-ui/core";
 import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import React, { useState } from "react";
 
-import SearchPage from "./pages/searchPage";
-import WelcomePage from "./pages/welcomePage";
+import SearchPage from "./pages/SearchPage";
+import WelcomePage from "./pages/WelcomePage";
 import { makeStyles } from "@material-ui/core/styles";
 
 const categoryThemes = {
   welcome: {
-    backgroundColor: "blue",
+    backgroundColor: "#00CED1",
     textColor: "white",
   },
   "tv-shows": {
-    backgroundColor: "purple",
+    backgroundColor: "#8A2BE2",
     textColor: "white",
   },
   movies: {
