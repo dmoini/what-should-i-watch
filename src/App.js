@@ -2,11 +2,36 @@ import { AppBar, Button, Toolbar } from "@material-ui/core";
 import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import React, { useState } from "react";
 
-import MoviesPage from "./pages/MoviesPage";
-import SearchPage from "./pages/SearchPage";
-import WelcomePage from "./pages/WelcomePage";
-import categoryThemes from "./common/categoryThemes";
+import SearchPage from "./pages/searchPage";
+import WelcomePage from "./pages/welcomePage";
 import { makeStyles } from "@material-ui/core/styles";
+
+const categoryThemes = {
+  welcome: {
+    backgroundColor: "#00CED1",
+    textColor: "white",
+  },
+  "tv-shows": {
+    backgroundColor: "#8A2BE2",
+    textColor: "white",
+  },
+  movies: {
+    backgroundColor: "red",
+    textColor: "white",
+  },
+  netflix: {
+    backgroundColor: "black",
+    textColor: "#DB0011",
+  },
+  hulu: {
+    backgroundColor: "#24E872",
+    textColor: "black",
+  },
+  "prime-video": {
+    backgroundColor: "#151B23",
+    textColor: "#3299D9",
+  },
+};
 
 const useStyles = makeStyles({
   appBar: {
@@ -96,7 +121,7 @@ export default function App() {
           <SearchPage text="TV Shows" />
         </Route>
         <Route exact path="/movies">
-          <MoviesPage />
+          <SearchPage text="Movies" />
         </Route>
         <Route exact path="/netflix">
           <SearchPage text="Netflix" />
