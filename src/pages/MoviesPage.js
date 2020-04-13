@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import Background from "../images/moviesBackground.jpg";
 import { Button } from "@material-ui/core";
 import GenreFilter from "../components/GenreFilter";
+import TMDB_GENRES from "../common/tmdbGenres";
+import YearRangeFilter from "../components/YearRangeFilter";
 import { makeStyles } from "@material-ui/core/styles";
 import { moviesTheme } from "../categoryThemes";
 
@@ -14,7 +16,6 @@ const useStyles = makeStyles({
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     height: "100vh",
-    paddingTop: "100px", // TODO: remove
   },
   button: {
     backgroundColor: moviesTheme.backgroundColor,
@@ -22,105 +23,41 @@ const useStyles = makeStyles({
     fontSize: 20,
     fontWeight: "bold",
   },
+  filterAndSearchComponents: {
+    position: "absolute",
+    left: "50%",
+    top: "40%",
+    transform: "translate(-50%, -50%)",
+  },
 });
 
-const genres = [
-  {
-    id: 28,
-    name: "Action",
-  },
-  {
-    id: 12,
-    name: "Adventure",
-  },
-  {
-    id: 16,
-    name: "Animation",
-  },
-  {
-    id: 35,
-    name: "Comedy",
-  },
-  {
-    id: 80,
-    name: "Crime",
-  },
-  {
-    id: 99,
-    name: "Documentary",
-  },
-  {
-    id: 18,
-    name: "Drama",
-  },
-  {
-    id: 10751,
-    name: "Family",
-  },
-  {
-    id: 14,
-    name: "Fantasy",
-  },
-  {
-    id: 36,
-    name: "History",
-  },
-  {
-    id: 27,
-    name: "Horror",
-  },
-  {
-    id: 10402,
-    name: "Music",
-  },
-  {
-    id: 9648,
-    name: "Mystery",
-  },
-  {
-    id: 10749,
-    name: "Romance",
-  },
-  {
-    id: 878,
-    name: "Science Fiction",
-  },
-  {
-    id: 10770,
-    name: "TV Movie",
-  },
-  {
-    id: 53,
-    name: "Thriller",
-  },
-  {
-    id: 10752,
-    name: "War",
-  },
-  {
-    id: 37,
-    name: "Western",
-  },
-];
-
 export default function MoviesPages() {
-  const [currentGenre, setCurrentGenre] = useState("");
+  const [genre, setGenre] = useState("");
+  const [startYear, setStartYear] = useState("");
+  const [endYear, setEndYear] = useState("");
+  const handleYearChange = {
+    startYear: (e) => setStartYear(e.target.value),
+    endYear: (e) => setEndYear(e.target.value),
+  };
   const classes = useStyles();
 
   return (
     <div className={classes.background}>
-      <GenreFilter
-        genres={genres}
-        currentGenre={currentGenre}
-        handleChange={(e) => setCurrentGenre(e.target.value)}
-      />
-      <Button
-        variant="contained"
-        color="secondary"
-        classes={{ root: classes.button }}
-      >
-        Search
-      </Button>
+      <div className={classes.filterAndSearchComponents}>
+        <GenreFilter
+          genres={TMDB_GENRES}
+          currentGenre={genre}
+          handleChange={(e) => setGenre(e.target.value)}
+        />
+        <YearRangeFilter handleChange={handleYearChange} />
+        <Button
+          variant="contained"
+          color="secondary"
+          classes={{ root: classes.button }}
+        >
+          Search
+        </Button>
+      </div>
     </div>
   );
 }

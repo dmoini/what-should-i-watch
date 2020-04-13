@@ -21,19 +21,26 @@ export default function GenreFilter({ genres, currentGenre, handleChange }) {
   const classes = useStyles();
 
   const menuItems = genres.map((genre) => {
-    return <MenuItem value={genre.name}>{genre.name}</MenuItem>;
+    return (
+      <MenuItem value={genre.name.toLowerCase()} key={genre.name}>
+        {genre.name}
+      </MenuItem>
+    );
   });
 
   return (
     <div>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel id="demo-simple-select-filled-label">Age</InputLabel>
+      <FormControl variant="filled" className={classes.formControl}>
+        <InputLabel shrink id="simple-select-placeholder-label-label">
+          Genre
+        </InputLabel>
         <Select
-          labelId="simple-select-filled-label"
-          id="simple-select-filled"
+          labelId="simple-select-placeholder-label-label"
+          id="simple-select-placeholder-label"
           value={currentGenre}
           onChange={handleChange}
-          autowidth
+          displayEmpty
+          className={classes.selectEmpty}
         >
           <MenuItem value="">
             <em>None</em>
