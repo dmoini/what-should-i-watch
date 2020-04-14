@@ -10,6 +10,7 @@ export const tvShowsTheme = {
 
 export const moviesTheme = {
   backgroundColor: "red",
+  buttonHoverColor: "#DA1E25",
   textColor: "white",
 };
 

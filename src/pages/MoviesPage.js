@@ -1,14 +1,12 @@
+import { Button, Grid } from "@material-ui/core";
 import React, { useState } from "react";
 
 import Background from "../images/moviesBackground.jpg";
-import { Button } from "@material-ui/core";
 import GenreFilter from "../components/GenreFilter";
-import TMDB_GENRES from "../common/tmdbGenres";
 import YearRangeFilter from "../components/YearRangeFilter";
 import { makeStyles } from "@material-ui/core/styles";
-import { moviesTheme } from "../categoryThemes";
+import { moviesTheme } from "../common/categoryThemes";
 
-// TODO: add hover, click colors
 const useStyles = makeStyles({
   background: {
     // backgroundImage: `url(${Background})`,
@@ -19,15 +17,16 @@ const useStyles = makeStyles({
   },
   button: {
     backgroundColor: moviesTheme.backgroundColor,
+    "&:hover": {
+      backgroundColor: moviesTheme.buttonHoverColor,
+    },
     color: moviesTheme.textColor,
     fontSize: 20,
     fontWeight: "bold",
   },
-  filterAndSearchComponents: {
-    position: "absolute",
-    left: "50%",
-    top: "40%",
-    transform: "translate(-50%, -50%)",
+  grid: {
+    minHeight: "100vh",
+    paddingBottom: "300px",
   },
 });
 
@@ -41,23 +40,75 @@ export default function MoviesPages() {
   };
   const classes = useStyles();
 
+  const isNumber = (s) => /^\d+$/.test(s);
+
+  const checkUserInput = () => {
+    if (
+      (startYear && !isNumber(startYear)) ||
+      (endYear && !isNumber(endYear))
+    ) {
+      window.alert(
+        "If using Start Year and/or End Year filters, make sure they are valid years."
+      );
+      return;
+    }
+  };
+
   return (
-    <div className={classes.background}>
-      <div className={classes.filterAndSearchComponents}>
+    <Grid
+      className={classes.grid}
+      container
+      spacing={1}
+      direction="column"
+      alignItems="center"
+      justify="center"
+    >
+      <Grid item>
         <GenreFilter
-          genres={TMDB_GENRES}
           currentGenre={genre}
           handleChange={(e) => setGenre(e.target.value)}
         />
+      </Grid>
+      <Grid item>
         <YearRangeFilter handleChange={handleYearChange} />
+      </Grid>
+      <Grid item>
         <Button
-          variant="contained"
-          color="secondary"
           classes={{ root: classes.button }}
+          variant="contained"
+          onClick={() => {
+            checkUserInput();
+            console.log(
+              `Genre: ${genre}\nStart Year: ${startYear}\nEnd Year: ${endYear}`
+            );
+          }}
         >
           Search
         </Button>
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
+
+  // return (
+  //   <div className={classes.background}>
+  //     <div className={classes.centerComponents}>
+  //       <GenreFilter
+  //         currentGenre={genre}
+  //         handleChange={(e) => setGenre(e.target.value)}
+  //       />
+  //       <YearRangeFilter handleChange={handleYearChange} />
+  //       <Button
+  //         classes={{ root: classes.button }}
+  //         variant="contained"
+  //         onClick={() => {
+  //           console.log(
+  //             `Genre: ${genre}\nStart Year: ${startYear}\nEnd Year: ${endYear}`
+  //           );
+  //         }}
+  //       >
+  //         Search
+  //       </Button>
+  //     </div>
+  //   </div>
+  // );
 }

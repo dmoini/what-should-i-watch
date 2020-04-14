@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import MoviesPage from "./pages/MoviesPage";
 import SearchPage from "./pages/SearchPage";
 import WelcomePage from "./pages/WelcomePage";
-import categoryThemes from "./categoryThemes";
+import categoryThemes from "./common/categoryThemes";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({

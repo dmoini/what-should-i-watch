@@ -1,6 +1,7 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
 
 import React from "react";
+import TMDB_GENRES from "../common/tmdbGenres";
 import { makeStyles } from "@material-ui/core/styles";
 
 const theme = {
@@ -17,13 +18,13 @@ const useStyles = makeStyles({
   },
 });
 
-export default function GenreFilter({ genres, currentGenre, handleChange }) {
+export default function GenreFilter({ currentGenre, handleChange }) {
   const classes = useStyles();
 
-  const menuItems = genres.map((genre) => {
+  const menuGenres = Object.keys(TMDB_GENRES).map((genre) => {
     return (
-      <MenuItem value={genre.name.toLowerCase()} key={genre.name}>
-        {genre.name}
+      <MenuItem value={genre} key={genre}>
+        {genre}
       </MenuItem>
     );
   });
@@ -45,7 +46,7 @@ export default function GenreFilter({ genres, currentGenre, handleChange }) {
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          {menuItems}
+          {menuGenres}
         </Select>
       </FormControl>
     </div>
