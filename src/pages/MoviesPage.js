@@ -117,27 +117,4 @@ export default function MoviesPages() {
       </Grid>
     </Grid>
   );
-
-  // return (
-  //   <div className={classes.background}>
-  //     <div className={classes.centerComponents}>
-  //       <GenreFilter
-  //         currentGenre={genre}
-  //         handleChange={(e) => setGenre(e.target.value)}
-  //       />
-  //       <YearRangeFilter handleChange={handleYearChange} />
-  //       <Button
-  //         classes={{ root: classes.button }}
-  //         variant="contained"
-  //         onClick={() => {
-  //           console.log(
-  //             `Genre: ${genre}\nStart Year: ${startYear}\nEnd Year: ${endYear}`
-  //           );
-  //         }}
-  //       >
-  //         Search
-  //       </Button>
-  //     </div>
-  //   </div>
-  // );
 }
