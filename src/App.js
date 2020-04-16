@@ -3,6 +3,7 @@ import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import React, { useState } from "react";
 
 import MoviesPage from "./pages/MoviesPage";
+import TvShowsPage from "./pages/TvShowsPage";
 import SearchPage from "./pages/SearchPage";
 import WelcomePage from "./pages/WelcomePage";
 import categoryThemes from "./common/categoryThemes";
@@ -93,7 +94,7 @@ export default function App() {
           <WelcomePage />
         </Route>
         <Route exact path="/tv-shows">
-          <SearchPage text="TV Shows" />
+          <TvShowsPage />
         </Route>
         <Route exact path="/movies">
           <MoviesPage />
