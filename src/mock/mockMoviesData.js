@@ -1,3 +1,5 @@
+// Base url for `poster_path` is https://image.tmdb.org/t/p/w500
+
 const TMDB_MOVIES_MOCK_DATA = {
   page: 1,
   total_results: 206,
