@@ -23,7 +23,7 @@ export default function GenreFilter({ currentGenre, handleChange }) {
 
   const menuGenres = Object.keys(TMDB_GENRES).map((genre) => {
     return (
-      <MenuItem value={genre} key={genre}>
+      <MenuItem value={TMDB_GENRES[genre]} key={TMDB_GENRES[genre]}>
         {genre}
       </MenuItem>
     );
