@@ -20,17 +20,17 @@ export default function TvShowsPage() {
       };
 
     const useStyles = makeStyles({
-          title: {
+        title: {
             color: tvShowsTheme.backgroundColor,
             fontWeight: "700",
         },
          formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
+            margin: theme.spacing(1),
+            minWidth: 120,
+        },
+        selectEmpty: {
+            marginTop: theme.spacing(2),
+        },
       });
 
     const classes = useStyles();
@@ -42,7 +42,7 @@ export default function TvShowsPage() {
       };
 
     return (
-        <div className={classes.root}>
+        <div className={classes.background} align = "center">
             <Typography variant = 'h5' className={classes.title}> TV Shows </Typography>
             <GenreFilter onSubmit = {(e) => setGenre(e.target.value)}/>
             <FormControl variant="filled" className={classes.formControl}>
