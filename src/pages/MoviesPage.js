@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 import AverageRatingFilter from "../components/AverageRatingFilter";
 import Background from "../images/moviesBackground.jpg";
+import CountryFilter from "../components/CountryFilter";
 import GenreFilter from "../components/GenreFilter";
 import YearRangeFilter from "../components/YearRangeFilter";
 import { makeStyles } from "@material-ui/core/styles";
@@ -27,7 +28,7 @@ const useStyles = makeStyles({
   },
   grid: {
     minHeight: "100vh",
-    paddingBottom: "700px",
+    paddingBottom: "500px",
   },
   title: {
     color: moviesTheme.backgroundColor,
@@ -37,6 +38,7 @@ const useStyles = makeStyles({
 
 export default function MoviesPages() {
   const [genre, setGenre] = useState("");
+  const [country, setCountry] = useState("");
   const [startYear, setStartYear] = useState("");
   const [endYear, setEndYear] = useState("");
   const [averageRating, setAverageRating] = useState("");
@@ -67,7 +69,7 @@ export default function MoviesPages() {
       return;
     }
 
-    if ([genre, startYear, endYear, averageRating].every((v) => !v)) {
+    if ([genre, country, startYear, endYear, averageRating].every((v) => !v)) {
       window.alert("Please use at least one filter.");
       return;
     }
@@ -94,6 +96,12 @@ export default function MoviesPages() {
         />
       </Grid>
       <Grid item>
+        <CountryFilter
+          currentCountry={country}
+          handleChange={(e) => setCountry(e.target.value)}
+        />
+      </Grid>
+      <Grid item>
         <YearRangeFilter handleChange={handleYearChange} />
       </Grid>
       <Grid item>
@@ -108,7 +116,7 @@ export default function MoviesPages() {
           onClick={() => {
             checkUserInput();
             console.log(
-              `Genre: ${genre}\nStart Year: ${startYear}\nEnd Year: ${endYear}\nAverage Rating:${averageRating}`
+              `Genre: ${genre}\nCountry: ${country}\nStart Year: ${startYear}\nEnd Year: ${endYear}\nAverage Rating:${averageRating}`
             );
           }}
         >
