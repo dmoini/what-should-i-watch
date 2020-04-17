@@ -4,6 +4,7 @@ import React, { useState } from "react";
 
 import SearchPage from "./pages/searchPage";
 import WelcomePage from "./pages/welcomePage";
+import HuluPage from "./pages/huluPage";
 import { makeStyles } from "@material-ui/core/styles";
 
 const categoryThemes = {
@@ -127,7 +128,7 @@ export default function App() {
           <SearchPage text="Netflix" />
         </Route>
         <Route exact path="/hulu">
-          <SearchPage text="Hulu" />
+          <HuluPage />
         </Route>
         <Route exact path="/prime-video">
           <SearchPage text="Prime Video" />
