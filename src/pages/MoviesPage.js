@@ -1,11 +1,11 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
+import { discoverMovies, getDiscoverMoviesResultPages } from "../api/moviesApi";
 
 import AverageRatingFilter from "../components/AverageRatingFilter";
 import CountryFilter from "../components/CountryFilter";
 import GenreFilter from "../components/GenreFilter";
 import SearchResultList from "../components/SearchResultList";
-import TMDB_MOVIES_MOCK_DATA from "../mock/mockMoviesData";
 import YearRangeFilter from "../components/YearRangeFilter";
 import { makeStyles } from "@material-ui/core/styles";
 import { moviesTheme } from "../common/categoryThemes";
@@ -38,6 +38,7 @@ export default function MoviesPages() {
   const [endYear, setEndYear] = useState("");
   const [averageRating, setAverageRating] = useState("");
   const [clickedSearch, setClickedSearch] = useState(false);
+  const [movieData, setMovieData] = useState({});
   const handleYearChange = {
     startYear: (e) => setStartYear(e.target.value),
     endYear: (e) => setEndYear(e.target.value),
@@ -73,15 +74,37 @@ export default function MoviesPages() {
     return false;
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (invalidUserInput()) {
       return;
     }
-    console.log(
-      `Genre: ${genre}\nCountry: ${country}\nStart Year: ${startYear}\nEnd Year: ${endYear}\nAverage Rating:${averageRating}`
-    );
 
-    setClickedSearch(true);
+    const totalPages = await getDiscoverMoviesResultPages({
+      genre,
+      country,
+      startYear,
+      endYear,
+      averageRating,
+    });
+
+    const res = await discoverMovies({
+      genre,
+      country,
+      startYear,
+      endYear,
+      averageRating,
+      page:
+        totalPages > 1
+          ? Math.floor(Math.random() * totalPages) + 1
+          : totalPages,
+    });
+
+    if (res) {
+      setMovieData(res);
+      setClickedSearch(true);
+    } else {
+      window.alert("Something went wrong.");
+    }
   };
 
   return (
@@ -123,8 +146,8 @@ export default function MoviesPages() {
           <Button
             classes={{ root: classes.button }}
             variant="contained"
-            onClick={() => {
-              handleSearch();
+            onClick={async () => {
+              await handleSearch();
             }}
           >
             Search
@@ -132,9 +155,7 @@ export default function MoviesPages() {
         </Grid>
       </Grid>
       <div style={{ paddingBottom: "100px" }}>
-        <>
-          {clickedSearch && <SearchResultList data={TMDB_MOVIES_MOCK_DATA} />}
-        </>
+        <>{clickedSearch && <SearchResultList data={movieData} />}</>
       </div>
     </div>
   );

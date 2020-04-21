@@ -6,6 +6,7 @@ import {
 } from "@material-ui/core";
 
 import InfoIcon from "@material-ui/icons/Info";
+import NoImageFound from "../images/noImageFound.png";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -38,18 +39,22 @@ export default function SearchResultList({ data }) {
         spacing={20}
         className={classes.gridList}
       >
-        {data.results.map((tile) => (
-          <GridListTile
-            key={`${TMDB_IMAGE_BASE_URL}${tile.poster_path}`}
-            imgFullHeight
-            imgFullWidth
-          >
+        {data.results.map((tile, index) => (
+          <GridListTile key={index} imgFullHeight imgFullWidth>
             <img
-              src={`${TMDB_IMAGE_BASE_URL}${tile.poster_path}`}
+              src={
+                tile.poster_path
+                  ? `${TMDB_IMAGE_BASE_URL}${tile.poster_path}`
+                  : NoImageFound
+              }
               alt={tile.title}
             />
             <GridListTileBar
-              title={`${tile.title} (${tile.release_date.substring(0, 4)})`}
+              title={
+                tile.release_date
+                  ? `${tile.title} (${tile.release_date.substring(0, 4)})`
+                  : `${tile.title}`
+              }
               actionIcon={
                 <IconButton
                   aria-label={`Info about ${tile.title}`}
