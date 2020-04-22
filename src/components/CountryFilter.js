@@ -1,7 +1,7 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
 
+import COUNTRY_ISO_3166_CODES from "../common/iso3166CountryCodes";
 import React from "react";
-import TMDB_GENRES from "../common/tmdbGenres";
 import { makeStyles } from "@material-ui/core/styles";
 
 const theme = {
@@ -18,13 +18,13 @@ const useStyles = makeStyles({
   },
 });
 
-export default function GenreFilter({ currentGenre, handleChange }) {
+export default function CountryFilter({ currentCountry, handleChange }) {
   const classes = useStyles();
 
-  const menuGenres = Object.keys(TMDB_GENRES).map((genre) => {
+  const menuCountries = COUNTRY_ISO_3166_CODES.map((country) => {
     return (
-      <MenuItem value={TMDB_GENRES[genre]} key={TMDB_GENRES[genre]}>
-        {genre}
+      <MenuItem value={country.code} key={country.code}>
+        {country.name}
       </MenuItem>
     );
   });
@@ -33,12 +33,12 @@ export default function GenreFilter({ currentGenre, handleChange }) {
     <div>
       <FormControl variant="filled" className={classes.formControl}>
         <InputLabel shrink id="simple-select-placeholder-label-label">
-          Genre
+          Country
         </InputLabel>
         <Select
           labelId="simple-select-placeholder-label-label"
           id="simple-select-placeholder-label"
-          value={currentGenre}
+          value={currentCountry}
           onChange={handleChange}
           displayEmpty
           className={classes.selectEmpty}
@@ -46,7 +46,7 @@ export default function GenreFilter({ currentGenre, handleChange }) {
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          {menuGenres}
+          {menuCountries}
         </Select>
       </FormControl>
     </div>
