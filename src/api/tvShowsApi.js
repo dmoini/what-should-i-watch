@@ -21,4 +21,20 @@ const discoverTv = ({
     return promise;
 };
 
-export { discoverTv };
+const getTrendingTv = () => {
+    const promise = new Promise((resolve, reject) => {
+        mdb.discoverTv({media_type: "tv", time_window: "day" },
+            (err, res) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    res.results.sort(() => Math.random() - 0.5);
+                    resolve(res);
+                }
+            }
+        );
+    });
+    return promise;
+};
+
+export { discoverTv, getTrendingTv };

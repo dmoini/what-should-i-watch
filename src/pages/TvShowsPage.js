@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-import { discoverTv } from "../api/tvShowsApi";
+import { discoverTv, getTrendingTv } from "../api/tvShowsApi";
 import SearchResultList from "../components/SearchResultList";
 import GenreFilter from "../components/GenreFilter";
 
@@ -27,6 +27,7 @@ export default function TvShowsPage() {
             minWidth: 120,
         },
         button: {
+            margin: theme.spacing(1),
             backgroundColor: tvShowsTheme.backgroundColor,
             color: tvShowsTheme.textColor
           }
@@ -43,6 +44,9 @@ export default function TvShowsPage() {
     };
 
     const handleSearch = async () => {
+        if (handleFilters()) {
+            return;
+          }
         const res = await discoverTv({
             genre,
             rating        
@@ -52,6 +56,21 @@ export default function TvShowsPage() {
             setTvData(res);
             setSearch(true);
         }
+    };
+    const handleTrending = async () => {
+        const res = await getTrendingTv();
+        if (res) {
+            setTvData(res);
+            setSearch(true);
+        }
+    };
+
+    const handleFilters = () => {
+        if ([genre, rating].every((v) => !v)) {
+          window.alert("Please use at least one filter.");
+          return true;
+        }
+        return false;
     };
 
     return (
@@ -74,6 +93,9 @@ export default function TvShowsPage() {
                 </Select>
             </FormControl>
             <div>
+                <Button classes = {{ root: classes.button }} onClick = { async () => { await handleTrending(); }}>
+                    Trending
+                </Button>
                 <Button classes = {{ root: classes.button }} onClick = { async () => { await handleSearch(); }}>
                     Search
                 </Button>
