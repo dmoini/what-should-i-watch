@@ -1,12 +1,12 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
+import { discoverMovies, getDiscoverMoviesResultPages } from "../api/moviesApi";
 
 import Logo from "../images/hululogo.png";
 import AverageRatingFilter from "../components/AverageRatingFilter";
 import CountryFilter from "../components/CountryFilter";
 import GenreFilter from "../components/GenreFilter";
 import SearchResultList from "../components/SearchResultList";
-import TMDB_MOVIES_MOCK_DATA from "../mock/mockMoviesData";
 import YearRangeFilter from "../components/YearRangeFilter";
 import { makeStyles } from "@material-ui/core/styles";
 import { huluTheme } from "../common/categoryThemes";
@@ -22,17 +22,18 @@ const useStyles = makeStyles({
     fontWeight: "bold",
   },
   grid: {
-    minHeight: "100vh",
-    paddingBottom: "700px",
+    minHeight: "50vh",
+    paddingTop: "80px",
+    paddingBottom: "80px",
   },
   title: {
     color: huluTheme.backgroundColor,
     fontWeight: "700",
-    marginTop: "20px",
+    // marginTop: "20px",
   },
   image: {
-    margin: "20px",
-    width: "300px",
+    margin: "0px",
+    width: "200px",
   },
 });
 
@@ -43,6 +44,7 @@ export default function HuluPage() {
   const [endYear, setEndYear] = useState("");
   const [averageRating, setAverageRating] = useState("");
   const [clickedSearch, setClickedSearch] = useState(false);
+  const [movieData, setMovieData] = useState({});
   const handleYearChange = {
     startYear: (e) => setStartYear(e.target.value),
     endYear: (e) => setEndYear(e.target.value),
@@ -78,15 +80,37 @@ export default function HuluPage() {
     return false;
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (invalidUserInput()) {
       return;
     }
-    console.log(
-      `Genre: ${genre}\nCountry: ${country}\nStart Year: ${startYear}\nEnd Year: ${endYear}\nAverage Rating:${averageRating}`
-    );
 
-    setClickedSearch(true);
+    const totalPages = await getDiscoverMoviesResultPages({
+      genre,
+      country,
+      startYear,
+      endYear,
+      averageRating,
+    });
+
+    const res = await discoverMovies({
+      genre,
+      country,
+      startYear,
+      endYear,
+      averageRating,
+      page:
+        totalPages > 1
+          ? Math.floor(Math.random() * totalPages) + 1
+          : totalPages,
+    });
+
+    if (res) {
+      setMovieData(res);
+      setClickedSearch(true);
+    } else {
+      window.alert("Something went wrong.");
+    }
   };
 
   return (
@@ -101,12 +125,12 @@ export default function HuluPage() {
       >
         <Grid item>
           <Typography variant="h2" className={classes.title}>
-            Find Movies
+            Find Movies on <img src={Logo} className={classes.image} alt="Logo" />
           </Typography>
         </Grid>
-        <Grid item>
+        {/* <Grid item>
           <img src={Logo} className={classes.image} alt="Logo" />
-        </Grid>
+        </Grid> */}
         <Grid item>
           <GenreFilter
             currentGenre={genre}
@@ -131,8 +155,8 @@ export default function HuluPage() {
           <Button
             classes={{ root: classes.button }}
             variant="contained"
-            onClick={() => {
-              handleSearch();
+            onClick={async () => {
+              await handleSearch();
             }}
           >
             Search
@@ -140,9 +164,7 @@ export default function HuluPage() {
         </Grid>
       </Grid>
       <div style={{ paddingBottom: "100px" }}>
-        <>
-          {clickedSearch && <SearchResultList data={TMDB_MOVIES_MOCK_DATA} />}
-        </>
+        <>{clickedSearch && <SearchResultList data={movieData} />}</>
       </div>
     </div>
   );
