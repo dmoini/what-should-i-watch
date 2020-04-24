@@ -71,7 +71,7 @@ export default function TvShowsPage() {
 
     return (
         <div align = "center">
-            <Typography variant = 'h5' className = { classes.title }>TV Shows</Typography>
+            <Typography variant = "h2" className = { classes.title }>TV Shows</Typography>
             <GenreFilter currentGenre = { genre } handleChange = {(e) => setGenre(e.target.value)}/>
             <FormControl variant = "filled" className = { classes.formControl }>
                 <InputLabel shrink id = "simple-select-placeholder-label-label">Rating</InputLabel>
