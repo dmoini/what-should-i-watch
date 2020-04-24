@@ -1,13 +1,7 @@
 import React, { useState } from "react";
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import { tvShowsTheme } from "../common/categoryThemes";
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import { makeStyles, Typography, Button, InputLabel, MenuItem, FormControl, Select } from '@material-ui/core';
 
+import { tvShowsTheme } from "../common/categoryThemes";
 import { discoverTv, getTrendingTv } from "../api/tvShowsApi";
 import SearchResultList from "../components/SearchResultList";
 import GenreFilter from "../components/GenreFilter";
@@ -81,7 +75,8 @@ export default function TvShowsPage() {
             <GenreFilter currentGenre = { genre } handleChange = {(e) => setGenre(e.target.value)}/>
             <FormControl variant = "filled" className = { classes.formControl }>
                 <InputLabel shrink id = "simple-select-placeholder-label-label">Rating</InputLabel>
-                <Select value={ rating } onClick = { handleRating } >
+                <Select value={ rating } onClick = { handleRating } displayEmpty>
+                    <MenuItem value=""><em>None</em></MenuItem>
                     <MenuItem value={1}>1</MenuItem>
                     <MenuItem value={2}>2</MenuItem>
                     <MenuItem value={3}>3</MenuItem>
