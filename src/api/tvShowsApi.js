@@ -1,4 +1,3 @@
-require("dotenv").config();
 const Promise = require("bluebird");
 const mdb = require("moviedb")(process.env.REACT_APP_TMDB_TVSHOWS_API_KEY);
 

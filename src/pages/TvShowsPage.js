@@ -11,6 +11,7 @@ import Select from '@material-ui/core/Select';
 import { discoverTv, getTrendingTv } from "../api/tvShowsApi";
 import SearchResultList from "../components/SearchResultList";
 import GenreFilter from "../components/GenreFilter";
+import CountryFilter from "../components/CountryFilter";
 
 export default function TvShowsPage() {
     const theme = {
@@ -36,10 +37,11 @@ export default function TvShowsPage() {
     const classes = useStyles();
     const [genre, setGenre] = useState("");
     const [rating, setRating] = useState("");
+    const [country, setCountry] = useState("");
     const [search, setSearch] = useState(false);
     const [tvData, setTvData] = useState({});
 
-    const handleChange = (event) => {
+    const handleRating = (event) => {
         setRating(event.target.value);
     };
 
@@ -75,11 +77,11 @@ export default function TvShowsPage() {
 
     return (
         <div align = "center">
-            <Typography variant = 'h5' className={classes.title}>TV Shows</Typography>
-            <GenreFilter onSubmit = {(e) => setGenre(e.target.value)}/>
-            <FormControl variant = "filled" className={classes.formControl}>
+            <Typography variant = 'h5' className = { classes.title }>TV Shows</Typography>
+            <GenreFilter currentGenre = { genre } handleChange = {(e) => setGenre(e.target.value)}/>
+            <FormControl variant = "filled" className = { classes.formControl }>
                 <InputLabel shrink id = "simple-select-placeholder-label-label">Rating</InputLabel>
-                <Select value={rating} onChange = { handleChange } >
+                <Select value={ rating } onClick = { handleRating } >
                     <MenuItem value={1}>1</MenuItem>
                     <MenuItem value={2}>2</MenuItem>
                     <MenuItem value={3}>3</MenuItem>
@@ -92,6 +94,7 @@ export default function TvShowsPage() {
                     <MenuItem value={10}>10</MenuItem>
                 </Select>
             </FormControl>
+           <CountryFilter currentCountry = { country } handleChange={(e) => setCountry(e.target.value)}/>
             <div>
                 <Button classes = {{ root: classes.button }} onClick = { async () => { await handleTrending(); }}>
                     Trending
