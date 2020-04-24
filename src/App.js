@@ -100,7 +100,7 @@ export default function App() {
           <MoviesPage />
         </Route>
         <Route exact path="/netflix">
-          <SearchPage text="Netflix" />
+          <NetflixPage text="Netflix" />
         </Route>
         <Route exact path="/hulu">
           <SearchPage text="Hulu" />

@@ -2,11 +2,11 @@ import { Button, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 
 import AverageRatingFilter from "../components/AverageRatingFilter";
-import Background from "../images/netflix_background.jpg";
+import Background from "../images/netflix_background.png";
 import GenreFilter from "../components/GenreFilter";
 import YearRangeFilter from "../components/YearRangeFilter";
 import { makeStyles } from "@material-ui/core/styles";
-import { moviesTheme } from "../common/categoryThemes";
+import { netflixTheme } from "../common/categoryThemes";
 
 const useStyles = makeStyles({
   background: {
