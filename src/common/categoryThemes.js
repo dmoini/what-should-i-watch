@@ -5,6 +5,7 @@ export const welcomeTheme = {
 
 export const tvShowsTheme = {
   backgroundColor: "#8A2BE2",
+  buttonHoverColor: "#7225D1",
   textColor: "white",
 };
 
