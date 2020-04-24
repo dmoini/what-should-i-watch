@@ -2,9 +2,10 @@ import { Button, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 
 import AverageRatingFilter from "../components/AverageRatingFilter";
-import Background from "../images/netflix_background.png";
+import CountryFilter from "../components/CountryFilter";
 import GenreFilter from "../components/GenreFilter";
 import YearRangeFilter from "../components/YearRangeFilter";
+import SearchResultList from "../components/SearchResultList";
 import { makeStyles } from "@material-ui/core/styles";
 import { netflixTheme } from "../common/categoryThemes";
 
@@ -36,9 +37,12 @@ const useStyles = makeStyles({
 
 export default function NetflixPages() {
   const [genre, setGenre] = useState("");
+  const [country, setCountry] = useState("");
   const [startYear, setStartYear] = useState("");
   const [endYear, setEndYear] = useState("");
   const [averageRating, setAverageRating] = useState("");
+  const [clickedSearch, setClickedSearch] = useState(false);
+  // const [movieData, setMovieData] = useState({});
   const handleYearChange = {
     startYear: (e) => setStartYear(e.target.value),
     endYear: (e) => setEndYear(e.target.value),
@@ -48,7 +52,12 @@ export default function NetflixPages() {
   const isNumber = (s) => /^\d+$/.test(s);
   const isValidRating = (s) => /^(10|(\d(\.\d+)?))$/.test(s);
 
-  const checkUserInput = () => {
+  const invalidUserInput = () => {
+    if ([genre, country, startYear, endYear, averageRating].every((v) => !v)) {
+      window.alert("Please use at least one filter.");
+      return true;
+    }
+
     if (
       (startYear && !isNumber(startYear)) ||
       (endYear && !isNumber(endYear))
@@ -56,20 +65,17 @@ export default function NetflixPages() {
       window.alert(
         "If using Start Year and/or End Year filters, make sure they are valid years."
       );
-      return;
+      return true;
     }
 
     if (averageRating && !isValidRating(averageRating)) {
       window.alert(
         "If using Average Rating filter, make sure it is a valid decimal between 1-10."
       );
-      return;
+      return true;
     }
 
-    if ([genre, startYear, endYear, averageRating].every((v) => !v)) {
-      window.alert("Please use at least one filter.");
-      return;
-    }
+    return false;
   };
 
   return (
@@ -91,6 +97,12 @@ export default function NetflixPages() {
           currentGenre={genre}
           handleChange={(e) => setGenre(e.target.value)}
         />
+        </Grid>
+        <Grid item>
+       <CountryFilter
+            currentCountry={country}
+            handleChange={(e) => setCountry(e.target.value)}
+          />
       </Grid>
       <Grid item>
         <YearRangeFilter handleChange={handleYearChange} />
