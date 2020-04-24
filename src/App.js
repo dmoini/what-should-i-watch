@@ -2,6 +2,7 @@ import { AppBar, Button, Toolbar } from "@material-ui/core";
 import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import React, { useState } from "react";
 
+import NetflixPage from "./pages/NetflixPage";
 import MoviesPage from "./pages/MoviesPage";
 import SearchPage from "./pages/SearchPage";
 import WelcomePage from "./pages/WelcomePage";

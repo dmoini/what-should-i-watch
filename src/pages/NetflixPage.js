@@ -83,7 +83,7 @@ export default function NetflixPages() {
     >
       <Grid item>
         <Typography variant="h2" className={classes.title}>
-          Find Movies
+          Find Movies and TV Shows
         </Typography>
       </Grid>
       <Grid item>
