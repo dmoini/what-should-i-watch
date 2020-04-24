@@ -52,13 +52,15 @@ export default function SearchResultList({ data }) {
                   ? `${TMDB_IMAGE_BASE_URL}${tile.poster_path}`
                   : NoImageFound
               }
-              alt={tile.title}
+              alt={tile.title ? tile.title : tile.name}
             />
             <GridListTileBar
               title={
                 tile.release_date
-                  ? `${tile.title} (${tile.release_date.substring(0, 4)})`
-                  : `${tile.title}`
+                  ? `${
+                      tile.title ? tile.title : tile.name
+                    } (${tile.release_date.substring(0, 4)})`
+                  : `${tile.title ? tile.title : tile.name}`
               }
               actionIcon={
                 <>
@@ -71,7 +73,9 @@ export default function SearchResultList({ data }) {
                       }
                     >
                       <IconButton
-                        aria-label={`Info about ${tile.title}`}
+                        aria-label={`Info about ${
+                          tile.title ? tile.title : tile.name
+                        }`}
                         className={classes.icon}
                       >
                         <InfoIcon />
