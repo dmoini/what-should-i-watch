@@ -1,5 +1,6 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
+import { findNetflixMoviesAndShows, getNetflixResultPages } from "../api/netflixApi";
 
 import AverageRatingFilter from "../components/AverageRatingFilter";
 import CountryFilter from "../components/CountryFilter";
@@ -42,7 +43,7 @@ export default function NetflixPages() {
   const [endYear, setEndYear] = useState("");
   const [averageRating, setAverageRating] = useState("");
   const [clickedSearch, setClickedSearch] = useState(false);
-  // const [movieData, setMovieData] = useState({});
+  const [netflixData, setNetflixData] = useState({});
   const handleYearChange = {
     startYear: (e) => setStartYear(e.target.value),
     endYear: (e) => setEndYear(e.target.value),
@@ -76,6 +77,39 @@ export default function NetflixPages() {
     }
 
     return false;
+  };
+
+  const handleSearch = async () => {
+    if (invalidUserInput()) {
+      return;
+    }
+
+    const totalPages = await getNetflixResultPages({
+      genre,
+      country,
+      startYear,
+      endYear,
+      averageRating,
+    });
+
+    const res = await findNetflixMoviesAndShows({
+      genre,
+      country,
+      startYear,
+      endYear,
+      averageRating,
+      page:
+        totalPages > 1
+          ? Math.floor(Math.random() * totalPages) + 1
+          : totalPages,
+    });
+
+    if (res) {
+      setNetflixData(res);
+      setClickedSearch(true);
+    } else {
+      window.alert("Something went wrong.");
+    }
   };
 
   return (
@@ -112,20 +146,21 @@ export default function NetflixPages() {
           handleChange={(e) => setAverageRating(e.target.value)}
         />
       </Grid>
-      <Grid item>
-        <Button
-          classes={{ root: classes.button }}
-          variant="contained"
-          onClick={() => {
-            checkUserInput();
-            console.log(
-              `Genre: ${genre}\nStart Year: ${startYear}\nEnd Year: ${endYear}\nAverage Rating:${averageRating}`
-            );
-          }}
-        >
-          Search
-        </Button>
+        <Grid item>
+          <Button
+            classes={{ root: classes.button }}
+            variant="contained"
+            onClick={async () => {
+              await handleSearch();
+            }}
+          >
+            Search
+          </Button>
+        </Grid>
       </Grid>
-    </Grid>
+      <div style={{ paddingBottom: "100px" }}>
+        <>{clickedSearch && <SearchResultList data={netflixData} />}</>
+      </div>
+    </div>
   );
 }
