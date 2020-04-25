@@ -3,6 +3,7 @@ import {
   GridListTile,
   GridListTileBar,
   IconButton,
+  Tooltip,
 } from "@material-ui/core";
 
 import InfoIcon from "@material-ui/icons/Info";
@@ -23,6 +24,10 @@ const useStyles = makeStyles({
   },
   icon: {
     color: "rgba(255, 255, 255, 0.54)",
+  },
+  toolTipText: {
+    fontSize: "18px",
+    lineHeight: "1.25",
   },
 });
 
@@ -47,7 +52,7 @@ export default function SearchResultList({ data }) {
                   ? `${TMDB_IMAGE_BASE_URL}${tile.poster_path}`
                   : NoImageFound
               }
-              alt={tile.title}
+              alt={tile.title ? tile.title : tile.name}
             />
             <GridListTileBar
               title={
@@ -62,6 +67,32 @@ export default function SearchResultList({ data }) {
                 >
                   <InfoIcon />
                 </IconButton>
+                  ? `${
+                      tile.title ? tile.title : tile.name
+                    } (${tile.release_date.substring(0, 4)})`
+                  : `${tile.title ? tile.title : tile.name}`
+              }
+              actionIcon={
+                <>
+                  {!!tile.overview && (
+                    <Tooltip
+                      title={
+                        <span className={classes.toolTipText}>
+                          {tile.overview}
+                        </span>
+                      }
+                    >
+                      <IconButton
+                        aria-label={`Info about ${
+                          tile.title ? tile.title : tile.name
+                        }`}
+                        className={classes.icon}
+                      >
+                        <InfoIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </>
               }
             />
           </GridListTile>

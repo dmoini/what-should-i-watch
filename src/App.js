@@ -4,6 +4,7 @@ import React, { useState } from "react";
 
 import NetflixPage from "./pages/NetflixPage";
 import MoviesPage from "./pages/MoviesPage";
+import TvShowsPage from "./pages/TvShowsPage";
 import SearchPage from "./pages/SearchPage";
 import WelcomePage from "./pages/WelcomePage";
 import categoryThemes from "./common/categoryThemes";
@@ -94,7 +95,7 @@ export default function App() {
           <WelcomePage />
         </Route>
         <Route exact path="/tv-shows">
-          <SearchPage text="TV Shows" />
+          <TvShowsPage />
         </Route>
         <Route exact path="/movies">
           <MoviesPage />
