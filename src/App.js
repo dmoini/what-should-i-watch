@@ -3,9 +3,8 @@ import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import React, { useState } from "react";
 
 import MoviesPage from "./pages/MoviesPage";
-import TvShowsPage from "./pages/TvShowsPage";
 import SearchPage from "./pages/SearchPage";
-import WelcomePage from "./pages/WelcomePage";
+import TvShowsPage from "./pages/TvShowsPage";
 import categoryThemes from "./common/categoryThemes";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -30,11 +29,11 @@ const useStyles = makeStyles({
 });
 
 export default function App() {
-  const [category, setCategory] = useState("welcome");
+  const [category, setCategory] = useState("tv-shows");
   const classes = useStyles({ category });
 
-  if (category === "welcome" && !window.location.href.endsWith("/")) {
-    window.location = "/";
+  if (category === "tv-shows" && !window.location.href.endsWith("tv-shows")) {
+    window.location = "/tv-shows";
   }
 
   return (
@@ -90,9 +89,6 @@ export default function App() {
       </AppBar>
 
       <Switch>
-        <Route exact path="/">
-          <WelcomePage />
-        </Route>
         <Route exact path="/tv-shows">
           <TvShowsPage />
         </Route>
