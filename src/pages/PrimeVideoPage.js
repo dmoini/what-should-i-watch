@@ -1,9 +1,13 @@
+import React, { useState, useEffect } from "react";
 import { Button, Grid, Typography } from "@material-ui/core";
-// import { ToggleButton } from '@material-ui/lab';
-import React, { useState } from "react";
 import { primeVideoTheme } from "../common/categoryThemes";
-// import 
 import { makeStyles } from "@material-ui/core/styles";
+import GuideboxShowsSearchResults from "../components/GuideboxShowsSearchResults";
+import GuideboxMoviesSearchResults from "../components/GuideboxMoviesSearchResults";
+
+import { apiHost, searchMovies, searchShows } from "../mock/mockPrimeVideoData";
+import PrimeLogo from "../images/prime_logo.png";
+import LimitFilter from "../components/LimitFilter";
 
 const useStyles = makeStyles({
   button: {
@@ -14,6 +18,7 @@ const useStyles = makeStyles({
     color: primeVideoTheme.textColor,
     fontSize: 20,
     fontWeight: "bold",
+    margin: "10px",
   },
   grid: {
     minHeight: "50vh",
@@ -24,90 +29,73 @@ const useStyles = makeStyles({
     color: primeVideoTheme.backgroundColor,
     fontWeight: "700",
   },
+  image: {
+    height: "150px",
+    marginBottom: "30px",
+  },
 });
 
 export default function MoviesPages() {
-  const [genre, setGenre] = useState("");
-  const [country, setCountry] = useState("");
-  const [startYear, setStartYear] = useState("");
-  const [endYear, setEndYear] = useState("");
-  const [averageRating, setAverageRating] = useState("");
-  const [clickedSearch, setClickedSearch] = useState(false);
-  const [movieData, setMovieData] = useState({});
-  const [movies, setMovies] = useState(true);
-  const [shows, setShows] = useState(false);
+  const [movies, setMovies] = useState([]);
+  const [shows, setShows] = useState([]);
+  const [limit, setLimit] = useState(10);
+  const [error, setError] = useState(null);
+  const [queryPerformed, setQueryPerformed] = useState(false);
 
-  const handleYearChange = {
-    startYear: (e) => setStartYear(e.target.value),
-    endYear: (e) => setEndYear(e.target.value),
+  useEffect(() => apiHost("http://api-public.guidebox.com/v2"));
+
+  const performMovieQuery = async (event) => {
+    event.preventDefault();
+
+    try {
+      const result = await searchMovies({
+        limit: limit ? limit : 10,
+        sources: "amazon_prime",
+      });
+      setMovies(result.results);
+      setQueryPerformed(true);
+    } catch (error) {
+      setError("Sorry, but something went wrong.");
+    }
   };
+  const performShowQuery = async (event) => {
+    event.preventDefault();
+
+    try {
+      const result = await searchShows({
+        limit: limit,
+        sources: "amazon_prime",
+      });
+      setShows(result.results);
+      setQueryPerformed(true);
+    } catch (error) {
+      setError("Sorry, but something went wrong.");
+    }
+  };
+
   const classes = useStyles();
 
-  const isNumber = (s) => /^\d+$/.test(s);
-  const isValidRating = (s) => /^(10|(\d(\.\d+)?))$/.test(s);
+  const isValidLimit = (s) =>
+    /^[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5]$/.test(s);
 
   const invalidUserInput = () => {
-    if ([genre, country, startYear, endYear, averageRating].every((v) => !v)) {
+    if ([limit, movies, shows].every((v) => !v)) {
       window.alert("Please use at least one filter.");
       return true;
     }
 
-    if (
-      (startYear && !isNumber(startYear)) ||
-      (endYear && !isNumber(endYear))
-    ) {
-      window.alert(
-        "If using Start Year and/or End Year filters, make sure they are valid years."
-      );
-      return true;
-    }
-
-    if (averageRating && !isValidRating(averageRating)) {
-      window.alert(
-        "If using Average Rating filter, make sure it is a valid decimal between 1-10."
-      );
+    if (limit && !isValidLimit(limit)) {
+      window.alert("Please select a limit in the range of 0-250");
       return true;
     }
 
     return false;
   };
 
-  const handleSearch = async () => {
-    if (invalidUserInput()) {
-      return;
-    }
-
-    // const totalPages = await getDiscoverMoviesResultPages({
-    //   genre,
-    //   country,
-    //   startYear,
-    //   endYear,
-    //   averageRating,
-    // });
-
-    // const res = await discoverMovies({
-    //   genre,
-    //   country,
-    //   startYear,
-    //   endYear,
-    //   averageRating,
-    //   page:
-    //     totalPages > 1
-    //       ? Math.floor(Math.random() * totalPages) + 1
-    //       : totalPages,
-    // });
-
-    // if (res) {
-    //   setMovieData(res);
-    //   setClickedSearch(true);
-    // } else {
-    //   window.alert("Something went wrong.");
-    // }
-  };
-//  CAN ONLY REALLY SEARCH BY MOVIES OR SHOWS 
-//  BUTTON 1 = SEARCH FOR MOVIES 
-//  BUTTON 2 = SEARCH FOR TV SHOWS
-//  SELECT NUMBER OF SHOWS / MOVIES TO BE RETURNED : DEFAULT = 10, no negative or greater than 250
+  //  CAN ONLY REALLY SEARCH BY MOVIES OR SHOWS
+  //  BUTTON 1 = SEARCH FOR MOVIES
+  //  BUTTON 2 = SEARCH FOR TV SHOWS
+  //  SELECT NUMBER OF SHOWS / MOVIES TO BE RETURNED : DEFAULT = 10, no negative or greater than 250
   return (
     <div>
       <Grid
@@ -120,44 +108,40 @@ export default function MoviesPages() {
       >
         <Grid item>
           <Typography variant="h2" className={classes.title}>
-            Prime Video
+            <img src={PrimeLogo} className={classes.image} alt="Logo" />
           </Typography>
         </Grid>
         <Grid item>
-          {/* <GenreFilter
-            currentGenre={genre}
-            handleChange={(e) => setGenre(e.target.value)}
-          /> */}
-        </Grid>
-        <Grid item>
-          {/* <CountryFilter
-            currentCountry={country}
-            handleChange={(e) => setCountry(e.target.value)}
-          /> */}
-        </Grid>
-        <Grid item>
-          {/* <YearRangeFilter handleChange={handleYearChange} /> */}
-        </Grid>
-        <Grid item>
-          {/* <AverageRatingFilter
-            handleChange={(e) => setAverageRating(e.target.value)}
-          /> */}
+          <LimitFilter handleChange={(e) => setLimit(e.target.value)} />
         </Grid>
         <Grid item>
           <Button
             classes={{ root: classes.button }}
             variant="contained"
-            onClick={async () => {
-              await handleSearch();
-            }}
+            onClick={performMovieQuery}
+            onSubmit={performMovieQuery}
           >
-            Generate 
+            Generate Movies
+          </Button>
+          <Button
+            classes={{ root: classes.button }}
+            variant="contained"
+            // onClick={async () => {
+            //   await handleSearch();
+            // }}
+            onClick={performShowQuery}
+          >
+            Generate Shows
           </Button>
         </Grid>
       </Grid>
-      {/* <div style={{ paddingBottom: "100px" }}>
-        <>{clickedSearch && <SearchResultList data={movieData} />}</>
-      </div> */}
+      <div style={{ paddingBottom: "100px" }}>
+        <>{queryPerformed && <GuideboxMoviesSearchResults data={movies} />}</>
+      </div>
+      <div style={{ paddingBottom: "100px" }}>
+        <>{queryPerformed && <GuideboxShowsSearchResults data={shows} />}</>
+      </div>
+      {error && <div className="error">{error}</div>}
     </div>
   );
 }
