@@ -40,6 +40,7 @@ export default function MoviesPages() {
   const [shows, setShows] = useState([]);
   const [limit, setLimit] = useState(10);
   const [error, setError] = useState(null);
+  const [showingMovies, setShowingMovies] = useState(false);
   const [queryPerformed, setQueryPerformed] = useState(false);
 
   useEffect(() => apiHost("http://api-public.guidebox.com/v2"));
@@ -53,6 +54,7 @@ export default function MoviesPages() {
         sources: "amazon_prime",
       });
       setMovies(result.results);
+      setShowingMovies(true);
       setQueryPerformed(true);
     } catch (error) {
       setError("Sorry, but something went wrong.");
@@ -67,6 +69,7 @@ export default function MoviesPages() {
         sources: "amazon_prime",
       });
       setShows(result.results);
+      setShowingMovies(false);
       setQueryPerformed(true);
     } catch (error) {
       setError("Sorry, but something went wrong.");
@@ -136,10 +139,18 @@ export default function MoviesPages() {
         </Grid>
       </Grid>
       <div style={{ paddingBottom: "100px" }}>
-        <>{queryPerformed && <GuideboxMoviesSearchResults data={movies} />}</>
+        <>
+          {queryPerformed && showingMovies && (
+            <GuideboxMoviesSearchResults data={movies} />
+          )}
+        </>
       </div>
       <div style={{ paddingBottom: "100px" }}>
-        <>{queryPerformed && <GuideboxShowsSearchResults data={shows} />}</>
+        <>
+          {queryPerformed && !showingMovies && (
+            <GuideboxShowsSearchResults data={shows} />
+          )}
+        </>
       </div>
       {error && <div className="error">{error}</div>}
     </div>
