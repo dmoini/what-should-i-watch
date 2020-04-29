@@ -57,6 +57,16 @@ export default function SearchResultList({ data }) {
             <GridListTileBar
               title={
                 tile.release_date
+                  ? `${tile.title} (${tile.release_date.substring(0, 4)})`
+                  : `${tile.title}`
+              }
+              actionIcon={
+                <IconButton
+                  aria-label={`Info about ${tile.title}`}
+                  className={classes.icon}
+                >
+                  <InfoIcon />
+                </IconButton>
                   ? `${
                       tile.title ? tile.title : tile.name
                     } (${tile.release_date.substring(0, 4)})`

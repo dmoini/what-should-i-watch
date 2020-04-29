@@ -2,6 +2,7 @@ import { AppBar, Button, Toolbar } from "@material-ui/core";
 import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import React, { useState } from "react";
 
+import NetflixPage from "./pages/NetflixPage";
 import MoviesPage from "./pages/MoviesPage";
 import SearchPage from "./pages/SearchPage";
 import TvShowsPage from "./pages/TvShowsPage";
@@ -96,7 +97,7 @@ export default function App() {
           <MoviesPage />
         </Route>
         <Route exact path="/netflix">
-          <SearchPage text="Netflix" />
+          <NetflixPage text="Netflix" />
         </Route>
         <Route exact path="/hulu">
           <SearchPage text="Hulu" />
