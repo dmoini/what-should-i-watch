@@ -2,10 +2,10 @@ import { AppBar, Button, Toolbar } from "@material-ui/core";
 import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import React, { useState } from "react";
 
-import NetflixPage from "./pages/NetflixPage";
 import MoviesPage from "./pages/MoviesPage";
 import SearchPage from "./pages/SearchPage";
 import TvShowsPage from "./pages/TvShowsPage";
+import NetflixPage from "./pages/NetflixPage";
 import categoryThemes from "./common/categoryThemes";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -97,7 +97,7 @@ export default function App() {
           <MoviesPage />
         </Route>
         <Route exact path="/netflix">
-          <NetflixPage text="Netflix" />
+          <NetflixPage />
         </Route>
         <Route exact path="/hulu">
           <SearchPage text="Hulu" />

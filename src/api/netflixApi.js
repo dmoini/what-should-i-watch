@@ -1,71 +1,56 @@
-const tmdb = require("moviedb")(process.env.REACT_APP_TMDB_API_KEY);
-const Promise = require("bluebird");
+let api = 'https://misconfigured-app.com/';
+const API_KEY = process.env.REACT_APP_GUIDEBOX_API_KEY;
 
-const MINIMUM_VOTES = 5;
-
-const generateParams = (
-  genre,
-  country,
-  startYear,
-  endYear,
-  averageRating,
-  page
-) => {
-  return {
-    page: page ? page : 1,
-    with_genres: genre,
-    region: country,
-    "primary_release_date.gte": startYear ? parseInt(startYear) : undefined,
-    "primary_release_date.lte": endYear ? parseInt(endYear) : undefined,
-    "vote_count.gte": MINIMUM_VOTES,
-    "vote_average.gte": averageRating ? parseInt(averageRating) : undefined,
-  };
+const apiHost = (host) => {
+  api = host;
 };
 
-const discoverMovies = ({
-  genre,
-  country,
-  startYear,
-  endYear,
-  averageRating,
-  page,
-}) => {
-  const promise = new Promise((resolve, reject) => {
-    tmdb.discoverMovie(
-      generateParams(genre, country, startYear, endYear, averageRating, page),
-      (err, res) => {
-        if (err) {
-          reject(err);
-        } else {
-          res.results.sort(() => Math.random() - 0.5);
-          resolve(res);
-        }
-      }
+const urlFor = (resource) => `${api}${resource}`;
+
+const HTTP_OK = 200;
+
+const throwResponseError = (response) => {
+  const error = new Error(response.statusText);
+  error.response = response;
+  throw error;
+};
+
+const emitNativeError = (error) => {
+  throw error;
+};
+
+const statusCheck = (successStatuses) => (response) => {
+  if (successStatuses.includes(response.status)) {
+    return response;
+  } else {
+    throwResponseError(response);
+  }
+};
+
+const okCheck = statusCheck([HTTP_OK]);
+
+const parameters = (params) => {
+  const result = new URLSearchParams(params);
+  result.set("api_key", API_KEY);
+  console.log(result);
+  return result;
+};
+
+const query = async (resource, params) => {
+  try {
+    const response = await fetch(
+      `${urlFor(resource)}?${parameters(params)}`,
+      {}
     );
-  });
-  return promise;
+    console.log(response);
+    const responseJson = okCheck(response);
+    return responseJson.json();
+  } catch (error) {
+    emitNativeError(error);
+  }
 };
 
-const getDiscoverMoviesResultPages = ({
-  genre,
-  country,
-  startYear,
-  endYear,
-  averageRating,
-}) => {
-  const promise = new Promise((resolve, reject) => {
-    tmdb.discoverMovie(
-      generateParams(genre, country, startYear, endYear, averageRating),
-      (err, res) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(res.total_pages);
-        }
-      }
-    );
-  });
-  return promise;
-};
+const searchMovies = (params) => query("/movies", params);
+const searchShows = (params) => query("/shows", params);
 
-export { discoverMovies, getDiscoverMoviesResultPages };
+export { apiHost, searchMovies, searchShows };

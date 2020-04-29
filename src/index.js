@@ -1,5 +1,5 @@
 import "./index.css";
-//import "typeface-roboto";
+import "typeface-roboto";
 
 import * as serviceWorker from "./serviceWorker";
 
