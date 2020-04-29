@@ -1,4 +1,4 @@
-const tmdb = require("moviedb")("f1dfe55e10b775d7a633595133cdcc57");
+const tmdb = require("moviedb")(process.env.REACT_APP_TMDB_API_KEY);
 const Promise = require("bluebird");
 
 const MINIMUM_VOTES = 5; 
