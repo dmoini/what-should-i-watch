@@ -1,8 +1,3 @@
-export const welcomeTheme = {
-  backgroundColor: "#00CED1",
-  textColor: "white",
-};
-
 export const tvShowsTheme = {
   backgroundColor: "#8A2BE2",
   buttonHoverColor: "#7225D1",
@@ -31,7 +26,6 @@ export const primeVideoTheme = {
 };
 
 const categoryThemes = {
-  welcome: welcomeTheme,
   "tv-shows": tvShowsTheme,
   movies: moviesTheme,
   netflix: netflixTheme,

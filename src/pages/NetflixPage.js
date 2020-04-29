@@ -113,39 +113,40 @@ export default function NetflixPages() {
   };
 
   return (
-    <Grid
-      className={classes.grid}
-      container
-      spacing={1}
-      direction="column"
-      alignItems="center"
-      justify="center"
-    >
-      <Grid item>
-        <Typography variant="h2" className={classes.title}>
-          Find Movies and TV Shows
-        </Typography>
-      </Grid>
-      <Grid item>
-        <GenreFilter
-          currentGenre={genre}
-          handleChange={(e) => setGenre(e.target.value)}
-        />
+    <div>
+      <Grid
+        className={classes.grid}
+        container
+        spacing={1}
+        direction="column"
+        alignItems="center"
+        justify="center"
+      >
+        <Grid item>
+          <Typography variant="h2" className={classes.title}>
+            Find Movies
+          </Typography>
         </Grid>
         <Grid item>
-       <CountryFilter
+          <GenreFilter
+            currentGenre={genre}
+            handleChange={(e) => setGenre(e.target.value)}
+          />
+        </Grid>
+        <Grid item>
+          <CountryFilter
             currentCountry={country}
             handleChange={(e) => setCountry(e.target.value)}
           />
-      </Grid>
-      <Grid item>
-        <YearRangeFilter handleChange={handleYearChange} />
-      </Grid>
-      <Grid item>
-        <AverageRatingFilter
-          handleChange={(e) => setAverageRating(e.target.value)}
-        />
-      </Grid>
+        </Grid>
+        <Grid item>
+          <YearRangeFilter handleChange={handleYearChange} />
+        </Grid>
+        <Grid item>
+          <AverageRatingFilter
+            handleChange={(e) => setAverageRating(e.target.value)}
+          />
+        </Grid>
         <Grid item>
           <Button
             classes={{ root: classes.button }}
