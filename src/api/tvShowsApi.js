@@ -1,12 +1,13 @@
-const Promise = require("bluebird");
 const mdb = require("moviedb")(process.env.REACT_APP_TMDB_API_KEY);
+const Promise = require("bluebird");
 
-const discoverTv = ({ genre, rating }) => {
+const discoverTv = ({ genre, country, averageRating }) => {
   const promise = new Promise((resolve, reject) => {
     mdb.discoverTv(
       {
         with_genres: genre,
-        "vote_average.gte": rating ? parseInt(rating) : undefined,
+        region: country,
+        "vote_average.gte": averageRating ? parseInt(averageRating) : undefined,
       },
       (err, res) => {
         if (err) {

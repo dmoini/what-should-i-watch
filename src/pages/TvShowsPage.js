@@ -1,60 +1,53 @@
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-  makeStyles,
-} from "@material-ui/core";
+import { Button, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { discoverTv, getTrendingTv } from "../api/tvShowsApi";
 
+import AverageRatingFilter from "../components/AverageRatingFilter";
 import CountryFilter from "../components/CountryFilter";
 import GenreFilter from "../components/GenreFilter";
-import SearchResultList from "../components/SearchResultList";
+import TmdbSearchResults from "../components/TmdbSearchResults";
+import { makeStyles } from "@material-ui/core/styles";
 import { tvShowsTheme } from "../common/categoryThemes";
 
-export default function TvShowsPage() {
-  const useStyles = makeStyles({
-    button: {
-      backgroundColor: tvShowsTheme.backgroundColor,
-      "&:hover": {
-        backgroundColor: tvShowsTheme.buttonHoverColor,
-      },
-      color: tvShowsTheme.textColor,
-      fontSize: 20,
-      fontWeight: "bold",
+const useStyles = makeStyles({
+  button: {
+    backgroundColor: tvShowsTheme.backgroundColor,
+    "&:hover": {
+      backgroundColor: tvShowsTheme.buttonHoverColor,
     },
-    grid: {
-      minHeight: "50vh",
-      paddingTop: "80px",
-      paddingBottom: "80px",
-    },
-    title: {
-      color: tvShowsTheme.backgroundColor,
-      fontWeight: "700",
-    },
-  });
+    color: tvShowsTheme.textColor,
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  grid: {
+    minHeight: "50vh",
+    paddingTop: "80px",
+    paddingBottom: "80px",
+  },
+  title: {
+    color: tvShowsTheme.backgroundColor,
+    fontWeight: "700",
+  },
+});
 
-  const classes = useStyles();
+export default function TvShowsPage() {
   const [genre, setGenre] = useState("");
-  const [rating, setRating] = useState("");
+  const [averageRating, setAverageRating] = useState("");
   const [country, setCountry] = useState("");
   const [search, setSearch] = useState(false);
   const [tvData, setTvData] = useState({});
+  const classes = useStyles();
 
-  const handleRating = (event) => {
-    setRating(event.target.value);
-  };
+  const isValidRating = (s) => /^(10|(\d(\.\d+)?))$/.test(s);
 
   const handleSearch = async () => {
-    if (handleFilters()) {
+    if (invalidUserInput()) {
       return;
     }
+
     const res = await discoverTv({
       genre,
-      rating,
+      averageRating,
     });
 
     if (res) {
@@ -62,6 +55,7 @@ export default function TvShowsPage() {
       setSearch(true);
     }
   };
+
   const handleTrending = async () => {
     const res = await getTrendingTv();
     if (res) {
@@ -70,67 +64,79 @@ export default function TvShowsPage() {
     }
   };
 
-  const handleFilters = () => {
-    if ([genre, rating].every((v) => !v)) {
+  const invalidUserInput = () => {
+    if ([genre, averageRating, country].every((v) => !v)) {
       window.alert("Please use at least one filter.");
       return true;
     }
+
+    if (averageRating && !isValidRating(averageRating)) {
+      window.alert(
+        "If using Average Rating filter, make sure it is a valid decimal between 1-10."
+      );
+      return true;
+    }
+
     return false;
   };
 
   return (
-    <div align="center">
-      <Typography variant="h2" className={classes.title}>
-        TV Shows
-      </Typography>
-      <GenreFilter
-        currentGenre={genre}
-        handleChange={(e) => setGenre(e.target.value)}
-      />
-      <FormControl variant="filled" className={classes.formControl}>
-        <InputLabel shrink id="simple-select-placeholder-label-label">
-          Rating
-        </InputLabel>
-        <Select value={rating} onClick={handleRating} displayEmpty>
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={1}>1</MenuItem>
-          <MenuItem value={2}>2</MenuItem>
-          <MenuItem value={3}>3</MenuItem>
-          <MenuItem value={4}>4</MenuItem>
-          <MenuItem value={5}>5</MenuItem>
-          <MenuItem value={6}>6</MenuItem>
-          <MenuItem value={7}>7</MenuItem>
-          <MenuItem value={8}>8</MenuItem>
-          <MenuItem value={9}>9</MenuItem>
-          <MenuItem value={10}>10</MenuItem>
-        </Select>
-      </FormControl>
-      <CountryFilter
-        currentCountry={country}
-        handleChange={(e) => setCountry(e.target.value)}
-      />
-      <div>
-        <Button
-          classes={{ root: classes.button }}
-          onClick={async () => {
-            await handleTrending();
-          }}
-        >
-          Trending
-        </Button>
-        <Button
-          classes={{ root: classes.button }}
-          onClick={async () => {
-            await handleSearch();
-          }}
-        >
-          Search
-        </Button>
-        <div style={{ paddingBottom: "100px" }}>
-          <>{search && <SearchResultList data={tvData} />}</>
-        </div>
+    <div>
+      <Grid
+        className={classes.grid}
+        container
+        spacing={1}
+        direction="column"
+        alignItems="center"
+        justify="center"
+      >
+        <Grid item>
+          <Typography variant="h2" className={classes.title}>
+            Find TV Shows
+          </Typography>
+        </Grid>
+        <Grid item>
+          <GenreFilter
+            currentGenre={genre}
+            handleChange={(e) => setGenre(e.target.value)}
+          />
+        </Grid>
+        <Grid item>
+          <CountryFilter
+            currentCountry={country}
+            handleChange={(e) => setCountry(e.target.value)}
+          />
+        </Grid>
+        <Grid item>
+          <AverageRatingFilter
+            handleChange={(e) => setAverageRating(e.target.value)}
+          />
+        </Grid>
+        <Grid item>
+          <Button
+            classes={{ root: classes.button }}
+            variant="contained"
+            style={{ marginRight: "10px" }}
+            onClick={async () => {
+              await handleSearch();
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            classes={{ root: classes.button }}
+            variant="contained"
+            style={{ marginLeft: "10px" }}
+            onClick={async () => {
+              await handleTrending();
+            }}
+          >
+            Trending
+          </Button>
+        </Grid>
+      </Grid>
+      <div style={{ paddingBottom: "100px" }}>
+        <>{search && <TmdbSearchResults data={tvData} />}</>
       </div>
     </div>
   );

@@ -18,16 +18,11 @@ const useStyles = makeStyles({
     overflow: "hidden",
   },
   gridList: {
-    width: "90vw",
+    width: "80vw",
     height: "100%",
   },
   icon: {
     color: "rgba(255, 255, 255, 0.54)",
-  },
-  image: {
-    height: 252,
-    width: 448,
-    objectFit: "cover",
   },
 });
 
@@ -37,8 +32,8 @@ export default function GuideboxShowsSearchResults({ data }) {
   return (
     <div className={classes.root}>
       <GridList
-        cellHeight={225}
-        cols={3}
+        cellHeight={160}
+        cols={4}
         spacing={20}
         className={classes.gridList}
       >
