@@ -3,9 +3,10 @@ import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import React, { useState } from "react";
 
 import MoviesPage from "./pages/MoviesPage";
+import NetflixPage from "./pages/NetflixPage";
+import PrimeVideoPage from "./pages/PrimeVideoPage";
 import SearchPage from "./pages/SearchPage";
 import TvShowsPage from "./pages/TvShowsPage";
-import PrimeVideoPage from "./pages/PrimeVideoPage";
 import categoryThemes from "./common/categoryThemes";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -97,7 +98,7 @@ export default function App() {
           <MoviesPage />
         </Route>
         <Route exact path="/netflix">
-          <SearchPage text="Netflix" />
+          <NetflixPage />
         </Route>
         <Route exact path="/hulu">
           <SearchPage text="Hulu" />
