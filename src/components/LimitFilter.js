@@ -18,7 +18,7 @@ export default function LimitFilter({ handleChange }) {
     <form className={classes.root} noValidate autoComplete="off">
       <TextField
         id="outlined-number"
-        label="Limit"
+        label="Number of Responses"
         type="number"
         onChange={handleChange}
         InputLabelProps={{

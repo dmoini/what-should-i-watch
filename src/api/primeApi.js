@@ -1,7 +1,8 @@
 // https://github.com/dondi/bazaar/blob/master/giphy-sample-react-hooks/src/api.js-real
+require("dotenv").config();
 
 let api = "https://misconfigured-app.com/";
-const API_KEY = "1234";
+const API_KEY = process.env.REACT_APP_GUIDEBOX_API_KEY;
 
 const apiHost = (host) => {
   api = host;
@@ -30,25 +31,20 @@ const statusCheck = (successStatuses) => (response) => {
 
 const okCheck = statusCheck([HTTP_OK]);
 
-const headers = {
-  Authorization: { API_KEY },
-};
-
-const params = (params) => {
+const parameters = (params) => {
   const result = new URLSearchParams(params);
   result.set("api_key", API_KEY);
+  console.log(result);
   return result;
 };
 
 const query = async (resource, params) => {
   try {
     const response = await fetch(
-      `${urlFor(resource)}?${paramsWithApiKey(params)}`,
-      {
-        headers,
-      }
+      `${urlFor(resource)}?${parameters(params)}`,
+      {}
     );
-
+    console.log(response);
     const responseJson = okCheck(response);
     return responseJson.json();
   } catch (error) {
@@ -58,3 +54,5 @@ const query = async (resource, params) => {
 
 const searchMovies = (params) => query("/movies", params);
 const searchShows = (params) => query("/shows", params);
+
+export { apiHost, searchMovies, searchShows };

@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import GuideboxShowsSearchResults from "../components/GuideboxShowsSearchResults";
 import GuideboxMoviesSearchResults from "../components/GuideboxMoviesSearchResults";
 
-import { apiHost, searchMovies, searchShows } from "../mock/mockPrimeVideoData";
+import { apiHost, searchMovies, searchShows } from "../api/primeApi";
 import PrimeLogo from "../images/prime_logo.png";
 import LimitFilter from "../components/LimitFilter";
 
@@ -48,9 +48,14 @@ export default function MoviesPages() {
   const performMovieQuery = async (event) => {
     event.preventDefault();
 
+    if (invalidUserInput()) {
+      return;
+    }
+
     try {
       const result = await searchMovies({
-        limit: limit ? limit : 10,
+        limit: limit,
+        offset: Math.floor(Math.random() * 10),
         sources: "amazon_prime",
       });
       setMovies(result.results);
@@ -63,9 +68,14 @@ export default function MoviesPages() {
   const performShowQuery = async (event) => {
     event.preventDefault();
 
+    if (invalidUserInput()) {
+      return;
+    }
+
     try {
       const result = await searchShows({
         limit: limit,
+        offset: Math.floor(Math.random() * 10),
         sources: "amazon_prime",
       });
       setShows(result.results);
