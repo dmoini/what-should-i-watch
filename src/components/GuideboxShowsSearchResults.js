@@ -24,6 +24,11 @@ const useStyles = makeStyles({
   icon: {
     color: "rgba(255, 255, 255, 0.54)",
   },
+  image: {
+    height: 252,
+    width: 448,
+    objectFit: "cover",
+  },
 });
 
 export default function GuideboxShowsSearchResults({ data }) {
@@ -32,16 +37,16 @@ export default function GuideboxShowsSearchResults({ data }) {
   return (
     <div className={classes.root}>
       <GridList
-        cellHeight={117}
-        cols={5}
+        cellHeight={225}
+        cols={3}
         spacing={20}
         className={classes.gridList}
       >
         {data.map((tile, index) => (
-          <GridListTile key={index} imgFullHeight imgFullWidth>
+          <GridListTile key={index}>
             <img
               src={
-                tile.artwork_208x117 ? `${tile.artwork_208x117}` : NoImageFound
+                tile.artwork_448x252 ? `${tile.artwork_448x252}` : NoImageFound
               }
               alt={tile.title}
             />

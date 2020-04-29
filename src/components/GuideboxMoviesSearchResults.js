@@ -29,31 +29,6 @@ const useStyles = makeStyles({
 export default function GuideboxMoviesSearchResults({ data }) {
   const classes = useStyles();
 
-  //   {
-  //     id: 159727,
-  //     title: "The Invisible Man",
-  //     release_year: 2018,
-  //     themoviedb: 337169,
-  //     original_title: "The Invisible Man",
-  //     alternate_titles: [],
-  //     imdb: "tt1051906",
-  //     pre_order: false,
-  //     in_theaters: false,
-  //     release_date: "2018-04-17",
-  //     rating: "NR",
-  //     rottentomatoes: 0,
-  //     freebase: "",
-  //     wikipedia_id: 0,
-  //     metacritic: null,
-  //     common_sense_media: null,
-  //     poster_120x171:
-  //       "http://static-api.guidebox.com/100117/thumbnails_movies_small/159727-8801342761-4066019920-1345254723-small-120x171.jpg",
-  //     poster_240x342:
-  //       "http://static-api.guidebox.com/100117/thumbnails_movies_medium/159727-6848356584-1650429801-5701544536-medium-240x342.jpg",
-  //     poster_400x570:
-  //       "http://static-api.guidebox.com/100117/thumbnails_movies/159727-8319376409-2809245247-4105077391-large-400x570.jpg",
-  //   },
-
   return (
     <div className={classes.root}>
       <GridList

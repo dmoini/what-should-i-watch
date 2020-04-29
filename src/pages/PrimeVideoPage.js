@@ -30,7 +30,7 @@ const useStyles = makeStyles({
     fontWeight: "700",
   },
   image: {
-    height: "150px",
+    height: "125px",
     marginBottom: "30px",
   },
 });
@@ -95,10 +95,6 @@ export default function MoviesPages() {
     return false;
   };
 
-  //  CAN ONLY REALLY SEARCH BY MOVIES OR SHOWS
-  //  BUTTON 1 = SEARCH FOR MOVIES
-  //  BUTTON 2 = SEARCH FOR TV SHOWS
-  //  SELECT NUMBER OF SHOWS / MOVIES TO BE RETURNED : DEFAULT = 10, no negative or greater than 250
   return (
     <div>
       <Grid
@@ -129,9 +125,6 @@ export default function MoviesPages() {
           <Button
             classes={{ root: classes.button }}
             variant="contained"
-            // onClick={async () => {
-            //   await handleSearch();
-            // }}
             onClick={performShowQuery}
           >
             Generate Shows
@@ -144,8 +137,6 @@ export default function MoviesPages() {
             <GuideboxMoviesSearchResults data={movies} />
           )}
         </>
-      </div>
-      <div style={{ paddingBottom: "100px" }}>
         <>
           {queryPerformed && !showingMovies && (
             <GuideboxShowsSearchResults data={shows} />
@@ -156,5 +147,3 @@ export default function MoviesPages() {
     </div>
   );
 }
-
-// need to add this prime tab to app.js
