@@ -36,7 +36,7 @@ const searchShows = () =>
         imdb_id: "tt4574334",
         tvdb: 305288,
         themoviedb: 1438,
-        freebase: null
+        freebase: null,
         wikipedia_id: 46301800,
         tvrage_id: 48493,
         artwork_608x342:

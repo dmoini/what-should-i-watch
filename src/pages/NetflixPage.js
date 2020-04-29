@@ -1,6 +1,6 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
-import { apiHost, searchMovies, searchShows } from "../api/netflixApi";
+import { apiHost, searchMovies, searchShows } from "../mock/mockNetflixData";
 import GuideboxShowsSearchResults from "../components/GuideboxShowsSearchResults";
 import GuideboxMoviesSearchResults from "../components/GuideboxMoviesSearchResults";
 import LimitFilter from "../components/LimitFilter";
@@ -37,11 +37,12 @@ export default function NetflixPages() {
   const [limit, setLimit] = useState(10);
   const [shows, setShows] = useState([]);
   const [movies, setMovies] = useState([]);
+  const [error, setError] = useState(null);
   const [showingShowInfo, setShowingShowInfo] = useState(false);
   const [showingMovieInfo, setShowingMovieInfo] = useState(false);
   const [netflixData, setNetflixData] = useState(false);
 
-  useEffect(() => apiHost("http://api-public.guidebox.com/v2"));
+  useEffect(() => apiHost());
 
   const performShowQuery = async (event) => {
     event.preventDefault();
@@ -52,7 +53,7 @@ export default function NetflixPages() {
 
     try {
       const result = await searchShows({
-        offset: 0,
+        offset: Math.floor(Math.random() * 10),
         limit: limit,
         sources: "netflix"
       })
@@ -60,9 +61,7 @@ export default function NetflixPages() {
       setShowingShowInfo(true);
       setNetflixData(true);
     } catch (error) {
-      this.setState({
-        error: 'Sorry, but something went wrong.'
-      })
+      setError('Something went wrong.');
     }
   }
 
@@ -75,7 +74,7 @@ export default function NetflixPages() {
 
     try {
       const result = await searchMovies({
-        offset: 0,
+        offset: Math.floor(Math.random() * 10),
         limit: limit,
         sources: "netflix"
       })
@@ -83,15 +82,13 @@ export default function NetflixPages() {
       setShowingMovieInfo(true);
       setNetflixData(true);
     } catch (error) {
-      this.setState({
-        error: 'Sorry, but something went wrong.'
-      })
+      setError('Something went wrong.');
     }
   }
   
   const classes = useStyles();
 
-  const isValidLimit = (s) => /^([1-9]|[0-9][1-9]|1[0-9][0-9]|2[0-4][0-9]|250)$/.test(s);
+  const isValidLimit = (s) => /^([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|250)$/.test(s);
 
   const invalidUserInput = () => {
     if ([limit, shows, movies].every((v) => !v)) {
@@ -120,7 +117,7 @@ export default function NetflixPages() {
       >
         <Grid item>
           <Typography variant="h2" className={classes.title}>
-            Find Netflix TV Shows and Movies
+            Find TV Shows and Movies
           </Typography>
         </Grid>
         <Grid item>
@@ -133,7 +130,6 @@ export default function NetflixPages() {
             classes={{ root: classes.button }}
             variant="contained"
             onClick={performShowQuery}
-            onSubmit={performShowQuery}
           >
           Find Shows
           </Button>
@@ -141,15 +137,14 @@ export default function NetflixPages() {
             classes={{ root: classes.button }}
             variant="contained"
             onClick={performMovieQuery}
-            onSubmit={performMovieQuery}
           >
           Find Movies
           </Button>
         </Grid>
       </Grid>
       <div style={{ paddingBottom: "100px" }}>
-        <>{showingShowInfo && netflixData && <GuideboxShowsSearchResults data={shows} />}</>
-        <>{showingMovieInfo && netflixData && <GuideboxMoviesSearchResults data={movies} />}</>
+        <>{showingShowInfo && netflixData && (<GuideboxShowsSearchResults data={shows} />)}</>
+        <>{showingMovieInfo && netflixData && (<GuideboxMoviesSearchResults data={movies} />)}</>
       </div>
     </div>
   );
