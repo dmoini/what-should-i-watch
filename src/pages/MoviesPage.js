@@ -1,12 +1,15 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
-import { discoverMovies, getDiscoverMoviesResultPages } from "../api/moviesApi";
+import {
+  discoverMovies,
+  getDiscoverMoviesResultPages,
+  getTrendingMovies,
+} from "../api/moviesApi";
 
 import AverageRatingFilter from "../components/AverageRatingFilter";
 import CountryFilter from "../components/CountryFilter";
 import GenreFilter from "../components/GenreFilter";
-import SearchResultList from "../components/SearchResultList";
-import YearRangeFilter from "../components/YearRangeFilter";
+import TmdbSearchResults from "../components/TmdbSearchResults";
 import { makeStyles } from "@material-ui/core/styles";
 import { moviesTheme } from "../common/categoryThemes";
 
@@ -34,33 +37,16 @@ const useStyles = makeStyles({
 export default function MoviesPages() {
   const [genre, setGenre] = useState("");
   const [country, setCountry] = useState("");
-  const [startYear, setStartYear] = useState("");
-  const [endYear, setEndYear] = useState("");
   const [averageRating, setAverageRating] = useState("");
-  const [clickedSearch, setClickedSearch] = useState(false);
+  const [clickedSearchOrTrending, setClickedSearchOrTrending] = useState(false);
   const [movieData, setMovieData] = useState({});
-  const handleYearChange = {
-    startYear: (e) => setStartYear(e.target.value),
-    endYear: (e) => setEndYear(e.target.value),
-  };
   const classes = useStyles();
 
-  const isNumber = (s) => /^\d+$/.test(s);
   const isValidRating = (s) => /^(10|(\d(\.\d+)?))$/.test(s);
 
   const invalidUserInput = () => {
-    if ([genre, country, startYear, endYear, averageRating].every((v) => !v)) {
+    if ([genre, country, averageRating].every((v) => !v)) {
       window.alert("Please use at least one filter.");
-      return true;
-    }
-
-    if (
-      (startYear && !isNumber(startYear)) ||
-      (endYear && !isNumber(endYear))
-    ) {
-      window.alert(
-        "If using Start Year and/or End Year filters, make sure they are valid years."
-      );
       return true;
     }
 
@@ -82,16 +68,12 @@ export default function MoviesPages() {
     const totalPages = await getDiscoverMoviesResultPages({
       genre,
       country,
-      startYear,
-      endYear,
       averageRating,
     });
 
     const res = await discoverMovies({
       genre,
       country,
-      startYear,
-      endYear,
       averageRating,
       page:
         totalPages > 1
@@ -101,7 +83,17 @@ export default function MoviesPages() {
 
     if (res) {
       setMovieData(res);
-      setClickedSearch(true);
+      setClickedSearchOrTrending(true);
+    } else {
+      window.alert("Something went wrong.");
+    }
+  };
+
+  const handleTrending = async () => {
+    const res = await getTrendingMovies();
+    if (res) {
+      setMovieData(res);
+      setClickedSearchOrTrending(true);
     } else {
       window.alert("Something went wrong.");
     }
@@ -135,9 +127,6 @@ export default function MoviesPages() {
           />
         </Grid>
         <Grid item>
-          <YearRangeFilter handleChange={handleYearChange} />
-        </Grid>
-        <Grid item>
           <AverageRatingFilter
             handleChange={(e) => setAverageRating(e.target.value)}
           />
@@ -146,16 +135,27 @@ export default function MoviesPages() {
           <Button
             classes={{ root: classes.button }}
             variant="contained"
+            style={{ marginRight: "10px" }}
             onClick={async () => {
               await handleSearch();
             }}
           >
             Search
           </Button>
+          <Button
+            classes={{ root: classes.button }}
+            variant="contained"
+            style={{ marginLeft: "10px" }}
+            onClick={async () => {
+              await handleTrending();
+            }}
+          >
+            Trending
+          </Button>
         </Grid>
       </Grid>
       <div style={{ paddingBottom: "100px" }}>
-        <>{clickedSearch && <SearchResultList data={movieData} />}</>
+        <>{clickedSearchOrTrending && <TmdbSearchResults data={movieData} />}</>
       </div>
     </div>
   );
