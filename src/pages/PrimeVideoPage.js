@@ -5,7 +5,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import GuideboxShowsSearchResults from "../components/GuideboxShowsSearchResults";
 import GuideboxMoviesSearchResults from "../components/GuideboxMoviesSearchResults";
 
-import { apiHost, searchMovies, searchShows } from "../api/primeApi";
+// import { apiHost, searchMovies, searchShows } from "../api/primeApi";
+import { apiHost, searchMovies, searchShows } from "../mock/mockPrimeVideoData";
 import PrimeLogo from "../images/prime_logo.png";
 import LimitFilter from "../components/LimitFilter";
 

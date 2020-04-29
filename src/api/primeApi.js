@@ -1,6 +1,4 @@
 // https://github.com/dondi/bazaar/blob/master/giphy-sample-react-hooks/src/api.js-real
-require("dotenv").config();
-
 let api = "https://misconfigured-app.com/";
 const API_KEY = process.env.REACT_APP_GUIDEBOX_API_KEY;
 
