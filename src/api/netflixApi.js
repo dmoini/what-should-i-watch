@@ -1,4 +1,4 @@
-let api = 'https://misconfigured-app.com/';
+let api = "https://misconfigured-app.com/";
 const API_KEY = process.env.REACT_APP_GUIDEBOX_API_KEY;
 
 const apiHost = (host) => {
@@ -32,7 +32,6 @@ const okCheck = statusCheck([HTTP_OK]);
 const parameters = (params) => {
   const result = new URLSearchParams(params);
   result.set("api_key", API_KEY);
-  console.log(result);
   return result;
 };
 
@@ -42,7 +41,6 @@ const query = async (resource, params) => {
       `${urlFor(resource)}?${parameters(params)}`,
       {}
     );
-    console.log(response);
     const responseJson = okCheck(response);
     return responseJson.json();
   } catch (error) {

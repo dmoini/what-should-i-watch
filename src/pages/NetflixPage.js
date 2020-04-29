@@ -43,7 +43,7 @@ export default function NetflixPages() {
   const [showingMovieInfo, setShowingMovieInfo] = useState(false);
   const [netflixData, setNetflixData] = useState(false);
 
-  useEffect(() => apiHost());
+  useEffect(() => apiHost("http://api-public.guidebox.com/v2"));
 
   const performShowQuery = async (event) => {
     event.preventDefault();

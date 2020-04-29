@@ -1,11 +1,5 @@
-import {
-  GridList,
-  GridListTile,
-  GridListTileBar,
-  IconButton,
-} from "@material-ui/core";
+import { GridList, GridListTile, GridListTileBar } from "@material-ui/core";
 
-import InfoIcon from "@material-ui/icons/Info";
 import NoImageFound from "../images/noImageFound.png";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
@@ -46,7 +40,11 @@ export default function GuideboxShowsSearchResults({ data }) {
           <GridListTile key={index}>
             <img
               src={
-                tile.artwork_448x252 ? `${tile.artwork_448x252}` : NoImageFound
+                tile.artwork_448x252
+                  ? `${tile.artwork_448x252}`
+                  : tile.artwork_608x342
+                  ? `${tile.artwork_608x342}`
+                  : NoImageFound
               }
               alt={tile.title}
             />
@@ -55,14 +53,6 @@ export default function GuideboxShowsSearchResults({ data }) {
                 tile.first_aired
                   ? `${tile.title} (${tile.first_aired.substring(0, 4)})`
                   : `${tile.title}`
-              }
-              actionIcon={
-                <IconButton
-                  aria-label={`Info about ${tile.title}`}
-                  className={classes.icon}
-                >
-                  <InfoIcon />
-                </IconButton>
               }
             />
           </GridListTile>
