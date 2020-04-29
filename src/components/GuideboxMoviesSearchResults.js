@@ -41,7 +41,7 @@ export default function GuideboxMoviesSearchResults({ data }) {
           <GridListTile key={index} imgFullHeight imgFullWidth>
             <img
               src={
-                tile.poster_240x342 ? `${tile.poster_240x342}` : NoImageFound
+                tile.poster_400x570 ? `${tile.poster_400x570}` : NoImageFound
               }
               alt={tile.title}
             />
