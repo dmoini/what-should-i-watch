@@ -33,7 +33,7 @@ const useStyles = makeStyles({
 
 const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
-export default function SearchResultList({ data }) {
+export default function TmdbSearchResults({ data }) {
   const classes = useStyles();
 
   return (

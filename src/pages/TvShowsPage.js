@@ -12,7 +12,7 @@ import { discoverTv, getTrendingTv } from "../api/tvShowsApi";
 
 import CountryFilter from "../components/CountryFilter";
 import GenreFilter from "../components/GenreFilter";
-import SearchResultList from "../components/SearchResultList";
+import TmdbSearchResults from "../components/TmdbSearchResults";
 import { tvShowsTheme } from "../common/categoryThemes";
 
 export default function TvShowsPage() {
@@ -52,6 +52,7 @@ export default function TvShowsPage() {
     if (handleFilters()) {
       return;
     }
+
     const res = await discoverTv({
       genre,
       rating,
@@ -62,6 +63,7 @@ export default function TvShowsPage() {
       setSearch(true);
     }
   };
+
   const handleTrending = async () => {
     const res = await getTrendingTv();
     if (res) {
@@ -71,7 +73,7 @@ export default function TvShowsPage() {
   };
 
   const handleFilters = () => {
-    if ([genre, rating].every((v) => !v)) {
+    if ([genre, rating, country].every((v) => !v)) {
       window.alert("Please use at least one filter.");
       return true;
     }
@@ -114,22 +116,26 @@ export default function TvShowsPage() {
       <div>
         <Button
           classes={{ root: classes.button }}
-          onClick={async () => {
-            await handleTrending();
-          }}
-        >
-          Trending
-        </Button>
-        <Button
-          classes={{ root: classes.button }}
+          variant="contained"
+          style={{ marginRight: "10px" }}
           onClick={async () => {
             await handleSearch();
           }}
         >
           Search
         </Button>
+        <Button
+          classes={{ root: classes.button }}
+          variant="contained"
+          style={{ marginLeft: "10px" }}
+          onClick={async () => {
+            await handleTrending();
+          }}
+        >
+          Trending
+        </Button>
         <div style={{ paddingBottom: "100px" }}>
-          <>{search && <SearchResultList data={tvData} />}</>
+          <>{search && <TmdbSearchResults data={tvData} />}</>
         </div>
       </div>
     </div>
