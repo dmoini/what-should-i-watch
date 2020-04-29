@@ -11,3 +11,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.hulu-header {
+  text-align: center;
+}
+
+.hulu-img {
+  width: 500px;
+  border-radius: 10px;
+  display: block;
+  margin: 5% auto;
+}
+
+.hulu-text {
+  text-align: center;
+}

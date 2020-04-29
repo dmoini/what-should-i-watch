@@ -4,6 +4,8 @@ import React, { useState } from "react";
 
 import MoviesPage from "./pages/MoviesPage";
 import SearchPage from "./pages/SearchPage";
+//import WelcomePage from "./pages/WelcomePage";
+import HuluPage from "./pages/HuluPage";
 import TvShowsPage from "./pages/TvShowsPage";
 import PrimeVideoPage from "./pages/PrimeVideoPage";
 import categoryThemes from "./common/categoryThemes";
@@ -100,7 +102,7 @@ export default function App() {
           <SearchPage text="Netflix" />
         </Route>
         <Route exact path="/hulu">
-          <SearchPage text="Hulu" />
+          <HuluPage />
         </Route>
         <Route exact path="/prime-video">
           <PrimeVideoPage />

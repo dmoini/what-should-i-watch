@@ -1,11 +1,5 @@
-import {
-  GridList,
-  GridListTile,
-  GridListTileBar,
-  IconButton,
-} from "@material-ui/core";
+import { GridList, GridListTile, GridListTileBar } from "@material-ui/core";
 
-import InfoIcon from "@material-ui/icons/Info";
 import NoImageFound from "../images/noImageFound.png";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
@@ -50,14 +44,6 @@ export default function GuideboxMoviesSearchResults({ data }) {
                 tile.release_year
                   ? `${tile.title} (${tile.release_year})`
                   : `${tile.title}`
-              }
-              actionIcon={
-                <IconButton
-                  aria-label={`Info about ${tile.title}`}
-                  className={classes.icon}
-                >
-                  <InfoIcon />
-                </IconButton>
               }
             />
           </GridListTile>
