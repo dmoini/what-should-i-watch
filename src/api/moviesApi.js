@@ -4,36 +4,36 @@ const Promise = require("bluebird");
 const MINIMUM_VOTES = 5; 
 
 
-const generateParams = (
-  genre,
-  country,
-  startYear,
-  endYear,
-  averageRating,
-  page
-) => {
+const generateParams = (genre, country, averageRating, page) => {
   return {
     page: page ? page : 1,
     with_genres: genre,
     region: country,
-    "primary_release_date.gte": startYear ? parseInt(startYear) : undefined,
-    "primary_release_date.lte": endYear ? parseInt(endYear) : undefined,
     "vote_count.gte": MINIMUM_VOTES,
     "vote_average.gte": averageRating ? parseInt(averageRating) : undefined,
   };
 };
 
-const discoverMovies = ({
-  genre,
-  country,
-  startYear,
-  endYear,
-  averageRating,
-  page,
-}) => {
+const getDiscoverMoviesResultPages = ({ genre, country, averageRating }) => {
   const promise = new Promise((resolve, reject) => {
     tmdb.discoverMovie(
-      generateParams(genre, country, startYear, endYear, averageRating, page),
+      generateParams(genre, country, averageRating),
+      (err, res) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res.total_pages);
+        }
+      }
+    );
+  });
+  return promise;
+};
+
+const discoverMovies = ({ genre, country, averageRating, page }) => {
+  const promise = new Promise((resolve, reject) => {
+    tmdb.discoverMovie(
+      generateParams(genre, country, averageRating, page),
       (err, res) => {
         if (err) {
           reject(err);
@@ -47,21 +47,16 @@ const discoverMovies = ({
   return promise;
 };
 
-const getDiscoverMoviesResultPages = ({
-  genre,
-  country,
-  startYear,
-  endYear,
-  averageRating,
-}) => {
+const getTrendingMovies = () => {
   const promise = new Promise((resolve, reject) => {
     tmdb.discoverMovie(
-      generateParams(genre, country, startYear, endYear, averageRating),
+      { media_type: "movie", time_window: "day" },
       (err, res) => {
         if (err) {
           reject(err);
         } else {
-          resolve(res.total_pages);
+          res.results.sort(() => Math.random() - 0.5);
+          resolve(res);
         }
       }
     );
@@ -69,4 +64,4 @@ const getDiscoverMoviesResultPages = ({
   return promise;
 };
 
-export { discoverMovies, getDiscoverMoviesResultPages };
+export { getDiscoverMoviesResultPages, discoverMovies, getTrendingMovies };

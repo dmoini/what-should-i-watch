@@ -1,5 +1,5 @@
-const Promise = require("bluebird");
 const mdb = require("moviedb")(process.env.REACT_APP_TMDB_API_KEY);
+const Promise = require("bluebird");
 
 const discoverTv = ({ genre, rating }) => {
   const promise = new Promise((resolve, reject) => {
