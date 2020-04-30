@@ -5,7 +5,7 @@ import { apiHost, searchMovies, searchShows } from "../api/netflixApi";
 import GuideboxMoviesSearchResults from "../components/GuideboxMoviesSearchResults";
 import GuideboxShowsSearchResults from "../components/GuideboxShowsSearchResults";
 import LimitFilter from "../components/LimitFilter";
-import NetflixLogo from "../images/netflixlogo.png"
+import NetflixLogo from "../images/netflixlogo.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { netflixTheme } from "../common/categoryThemes";
 
@@ -101,8 +101,7 @@ export default function NetflixPages() {
 
   const classes = useStyles();
 
-  const isValidLimit = (s) =>
-    /^([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|250)$/.test(s);
+  const isValidLimit = (s) => /^(\d|[1-9]\d|1\d\d|2[0-4]\d|250)$/.test(s);
 
   const invalidUserInput = () => {
     if ([limit, shows, movies].every((v) => !v)) {
@@ -130,7 +129,7 @@ export default function NetflixPages() {
       >
         <Grid item>
           <Typography variant="h2" className={classes.title}>
-          <img src={NetflixLogo} className={classes.image} alt="Logo" />
+            <img src={NetflixLogo} className={classes.image} alt="Logo" />
           </Typography>
         </Grid>
         <Grid item>
