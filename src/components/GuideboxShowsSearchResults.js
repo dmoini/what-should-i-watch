@@ -27,7 +27,7 @@ export default function GuideboxShowsSearchResults({ data }) {
     <div className={classes.root}>
       <GridList
         cellHeight={150}
-        cols={3}
+        cols={4}
         spacing={20}
         className={classes.gridList}
       >

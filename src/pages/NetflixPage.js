@@ -1,11 +1,14 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { apiHost, searchMovies, searchShows } from "../api/netflixApi";
+
 import GuideboxMoviesSearchResults from "../components/GuideboxMoviesSearchResults";
 import GuideboxShowsSearchResults from "../components/GuideboxShowsSearchResults";
 import LimitFilter from "../components/LimitFilter";
 import { makeStyles } from "@material-ui/core/styles";
 import { netflixTheme } from "../common/categoryThemes";
+
+const MAX_OFFSET = 250;
 
 const useStyles = makeStyles({
   background: {
@@ -44,7 +47,6 @@ export default function NetflixPages() {
   const [limit, setLimit] = useState(10);
   const [shows, setShows] = useState([]);
   const [movies, setMovies] = useState([]);
-  const [error, setError] = useState();
   const [showingShowInfo, setShowingShowInfo] = useState(false);
   const [netflixData, setNetflixData] = useState(false);
 
@@ -59,11 +61,11 @@ export default function NetflixPages() {
 
     try {
       const result = await searchShows({
-        offset: Math.floor(Math.random() * 10),
+        offset: Math.floor(Math.random() * (MAX_OFFSET - limit)),
         limit: limit,
         sources: "netflix",
       });
-      setShows(result.results);
+      setShows(result.results.sort(() => Math.random() - 0.5));
       setShowingShowInfo(true);
       setNetflixData(true);
     } catch (error) {
@@ -80,11 +82,11 @@ export default function NetflixPages() {
 
     try {
       const result = await searchMovies({
-        offset: Math.floor(Math.random() * 10),
+        offset: Math.floor(Math.random() * (MAX_OFFSET - limit)),
         limit: limit,
         sources: "netflix",
       });
-      setMovies(result.results);
+      setMovies(result.results.sort(() => Math.random() - 0.5));
       setShowingShowInfo(false);
       setNetflixData(true);
     } catch (error) {
@@ -130,13 +132,6 @@ export default function NetflixPages() {
           <LimitFilter handleChange={(e) => setLimit(e.target.value)} />
         </Grid>
         <Grid item>
-          <Button 
-            classes={{ root: classes.button }}
-            variant="contained"
-            onClick={performShowQuery}
-          >
-            Find Shows
-          </Button>
           <Button
             classes={{ root: classes.button }}
             variant="contained"
@@ -144,22 +139,22 @@ export default function NetflixPages() {
           >
             Find Movies
           </Button>
+          <Button
+            classes={{ root: classes.button }}
+            variant="contained"
+            onClick={performShowQuery}
+          >
+            Find Shows
+          </Button>
         </Grid>
       </Grid>
       <div style={{ paddingTop: "100px" }}>
         <>
-        <Typography variant="h3" className={classes.resultTitle}>
-            Shows
-          </Typography>
           {showingShowInfo && netflixData && (
             <GuideboxShowsSearchResults data={shows} />
           )}
         </>
-        &nbsp;
         <>
-        <Typography variant="h3" className={classes.resultTitle}>
-            Movies
-          </Typography>
           {!showingShowInfo && netflixData && (
             <GuideboxMoviesSearchResults data={movies} />
           )}
