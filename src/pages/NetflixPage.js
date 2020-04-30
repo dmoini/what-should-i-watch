@@ -1,33 +1,46 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { apiHost, searchMovies, searchShows } from "../mock/mockPrimeVideoData";
+import { apiHost, searchMovies, searchShows } from "../api/netflixApi";
 
 import GuideboxMoviesSearchResults from "../components/GuideboxMoviesSearchResults";
 import GuideboxShowsSearchResults from "../components/GuideboxShowsSearchResults";
 import LimitFilter from "../components/LimitFilter";
-import PrimeLogo from "../images/prime_logo.png";
+import NetflixLogo from "../images/netflixlogo.png";
 import { makeStyles } from "@material-ui/core/styles";
-import { primeVideoTheme } from "../common/categoryThemes";
+import { netflixTheme } from "../common/categoryThemes";
+
+const MAX_OFFSET = 250;
 
 const useStyles = makeStyles({
+  background: {
+    backgroundPosition: "center",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    height: "100vh",
+  },
   button: {
-    backgroundColor: primeVideoTheme.backgroundColor,
+    backgroundColor: netflixTheme.backgroundColor,
     "&:hover": {
-      backgroundColor: primeVideoTheme.buttonHoverColor,
+      backgroundColor: netflixTheme.buttonHoverColor,
     },
-    color: primeVideoTheme.textColor,
+    color: netflixTheme.textColor,
     fontSize: 20,
     fontWeight: "bold",
     margin: "10px",
   },
   grid: {
     minHeight: "50vh",
-    paddingTop: "80px",
-    paddingBottom: "80px",
+    paddingTop: "10px",
+    paddingBottom: "10px",
   },
   title: {
-    color: primeVideoTheme.backgroundColor,
+    color: netflixTheme.backgroundColor,
     fontWeight: "700",
+  },
+  resultTitle: {
+    color: netflixTheme.backgroundColor,
+    fontWeight: "500",
+    titlePosition: "center",
   },
   image: {
     height: "125px",
@@ -35,15 +48,35 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MoviesPages() {
-  const [movies, setMovies] = useState([]);
-  const [shows, setShows] = useState([]);
+export default function NetflixPages() {
   const [limit, setLimit] = useState(10);
-  const [error, setError] = useState(null);
-  const [showingMovies, setShowingMovies] = useState(false);
-  const [queryPerformed, setQueryPerformed] = useState(false);
+  const [shows, setShows] = useState([]);
+  const [movies, setMovies] = useState([]);
+  const [showingShowInfo, setShowingShowInfo] = useState(false);
+  const [netflixData, setNetflixData] = useState(false);
 
   useEffect(() => apiHost("http://api-public.guidebox.com/v2"));
+
+  const performShowQuery = async (event) => {
+    event.preventDefault();
+
+    if (invalidUserInput()) {
+      return;
+    }
+
+    try {
+      const result = await searchShows({
+        offset: Math.floor(Math.random() * (MAX_OFFSET - limit)),
+        limit: limit,
+        sources: "netflix",
+      });
+      setShows(result.results.sort(() => Math.random() - 0.5));
+      setShowingShowInfo(true);
+      setNetflixData(true);
+    } catch (error) {
+      window.alert("Something went wrong.");
+    }
+  };
 
   const performMovieQuery = async (event) => {
     event.preventDefault();
@@ -54,51 +87,30 @@ export default function MoviesPages() {
 
     try {
       const result = await searchMovies({
+        offset: Math.floor(Math.random() * (MAX_OFFSET - limit)),
         limit: limit,
-        offset: Math.floor(Math.random() * 10),
-        sources: "amazon_prime",
+        sources: "netflix",
       });
-      setMovies(result.results);
-      setShowingMovies(true);
-      setQueryPerformed(true);
+      setMovies(result.results.sort(() => Math.random() - 0.5));
+      setShowingShowInfo(false);
+      setNetflixData(true);
     } catch (error) {
-      setError("Sorry, but something went wrong.");
-    }
-  };
-  const performShowQuery = async (event) => {
-    event.preventDefault();
-
-    if (invalidUserInput()) {
-      return;
-    }
-
-    try {
-      const result = await searchShows({
-        limit: limit,
-        offset: Math.floor(Math.random() * 10),
-        sources: "amazon_prime",
-      });
-      setShows(result.results);
-      setShowingMovies(false);
-      setQueryPerformed(true);
-    } catch (error) {
-      setError("Sorry, but something went wrong.");
+      window.alert("Something went wrong.");
     }
   };
 
   const classes = useStyles();
 
-  const isValidLimit = (s) =>
-    /^[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5]$/.test(s);
+  const isValidLimit = (s) => /^(\d|[1-9]\d|1\d\d|2[0-4]\d|250)$/.test(s);
 
   const invalidUserInput = () => {
-    if ([limit, movies, shows].every((v) => !v)) {
+    if ([limit, shows, movies].every((v) => !v)) {
       window.alert("Please use at least one filter.");
       return true;
     }
 
     if (limit && !isValidLimit(limit)) {
-      window.alert("Please select a limit in the range of 0-250");
+      window.alert("Please select a limit between 0-250.");
       return true;
     }
 
@@ -117,7 +129,7 @@ export default function MoviesPages() {
       >
         <Grid item>
           <Typography variant="h2" className={classes.title}>
-            <img src={PrimeLogo} className={classes.image} alt="Logo" />
+            <img src={NetflixLogo} className={classes.image} alt="Logo" />
           </Typography>
         </Grid>
         <Grid item>
@@ -128,32 +140,30 @@ export default function MoviesPages() {
             classes={{ root: classes.button }}
             variant="contained"
             onClick={performMovieQuery}
-            onSubmit={performMovieQuery}
           >
-            Generate Movies
+            Find Movies
           </Button>
           <Button
             classes={{ root: classes.button }}
             variant="contained"
             onClick={performShowQuery}
           >
-            Generate Shows
+            Find Shows
           </Button>
         </Grid>
       </Grid>
-      <div style={{ paddingBottom: "100px" }}>
+      <div style={{ paddingTop: "100px" }}>
         <>
-          {queryPerformed && showingMovies && (
-            <GuideboxMoviesSearchResults data={movies} />
-          )}
-        </>
-        <>
-          {queryPerformed && !showingMovies && (
+          {showingShowInfo && netflixData && (
             <GuideboxShowsSearchResults data={shows} />
           )}
         </>
+        <>
+          {!showingShowInfo && netflixData && (
+            <GuideboxMoviesSearchResults data={movies} />
+          )}
+        </>
       </div>
-      {error && <div className="error">{error}</div>}
     </div>
   );
 }

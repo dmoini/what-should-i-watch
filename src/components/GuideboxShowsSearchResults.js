@@ -26,7 +26,7 @@ export default function GuideboxShowsSearchResults({ data }) {
   return (
     <div className={classes.root}>
       <GridList
-        cellHeight={160}
+        cellHeight={150}
         cols={4}
         spacing={20}
         className={classes.gridList}
@@ -35,7 +35,11 @@ export default function GuideboxShowsSearchResults({ data }) {
           <GridListTile key={index}>
             <img
               src={
-                tile.artwork_448x252 ? `${tile.artwork_448x252}` : NoImageFound
+                tile.artwork_448x252
+                  ? `${tile.artwork_448x252}`
+                  : tile.artwork_608x342
+                  ? `${tile.artwork_608x342}`
+                  : NoImageFound
               }
               alt={tile.title}
             />

@@ -1,10 +1,10 @@
-// https://github.com/dondi/bazaar/blob/master/giphy-sample-react-hooks/src/api.js-real
 let api = "https://misconfigured-app.com/";
 const API_KEY = process.env.REACT_APP_GUIDEBOX_API_KEY;
 
 const apiHost = (host) => {
   api = host;
 };
+
 const urlFor = (resource) => `${api}${resource}`;
 
 const HTTP_OK = 200;
