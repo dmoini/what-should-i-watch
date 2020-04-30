@@ -51,14 +51,6 @@ export default function GuideboxMoviesSearchResults({ data }) {
                   ? `${tile.title} (${tile.release_year})`
                   : `${tile.title}`
               }
-              actionIcon={
-                <IconButton
-                  aria-label={`Info about ${tile.title}`}
-                  className={classes.icon}
-                >
-                  <InfoIcon />
-                </IconButton>
-              }
             />
           </GridListTile>
         ))}

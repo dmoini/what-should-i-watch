@@ -42,7 +42,7 @@ export default function HuluPage() {
   const [error, setError] = useState(null);
   const [showingMovies, setShowingMovies] = useState(false);
   const [queryPerformed, setQueryPerformed] = useState(false);
-
+  const MAX_OFFSET = 250;
   useEffect(() => apiHost("http://api-public.guidebox.com/v2"));
 
   const performMovieQuery = async (event) => {
@@ -55,8 +55,8 @@ export default function HuluPage() {
     try {
       const result = await searchMovies({
         limit: limit,
-        offset: Math.floor(Math.random() * 10),
-        sources: "amazon_prime",
+        offset: Math.floor(Math.random() * (MAX_OFFSET - limit)),
+        sources: "hulu",
       });
       setMovies(result.results);
       setShowingMovies(true);
@@ -75,10 +75,9 @@ export default function HuluPage() {
     try {
       const result = await searchShows({
         limit: limit,
-        offset: Math.floor(Math.random() * 10),
-        sources: "amazon_prime",
+        sources: "hulu",
       });
-      setShows(result.results);
+      setShows(result.results.sort(() => Math.random() - 0.5));
       setShowingMovies(false);
       setQueryPerformed(true);
     } catch (error) {
@@ -89,14 +88,13 @@ export default function HuluPage() {
   const classes = useStyles();
 
   const isValidLimit = (s) =>
-    /^[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5]$/.test(s);
+    /^(\d|[1-9]\d|1\d\d|2[0-4]\d|250)$/.test(s);
 
   const invalidUserInput = () => {
     if ([limit, movies, shows].every((v) => !v)) {
       window.alert("Please use at least one filter.");
       return true;
     }
-
     if (limit && !isValidLimit(limit)) {
       window.alert("Please select a limit in the range of 0-250");
       return true;
