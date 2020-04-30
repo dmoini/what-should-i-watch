@@ -5,6 +5,7 @@ import { apiHost, searchMovies, searchShows } from "../api/netflixApi";
 import GuideboxMoviesSearchResults from "../components/GuideboxMoviesSearchResults";
 import GuideboxShowsSearchResults from "../components/GuideboxShowsSearchResults";
 import LimitFilter from "../components/LimitFilter";
+import NetflixLogo from "../images/netflixlogo.png"
 import { makeStyles } from "@material-ui/core/styles";
 import { netflixTheme } from "../common/categoryThemes";
 
@@ -29,8 +30,8 @@ const useStyles = makeStyles({
   },
   grid: {
     minHeight: "50vh",
-    paddingTop: "50px",
-    paddingBottom: "50px",
+    paddingTop: "10px",
+    paddingBottom: "10px",
   },
   title: {
     color: netflixTheme.backgroundColor,
@@ -40,6 +41,10 @@ const useStyles = makeStyles({
     color: netflixTheme.backgroundColor,
     fontWeight: "500",
     titlePosition: "center",
+  },
+  image: {
+    height: "125px",
+    marginBottom: "30px",
   },
 });
 
@@ -125,7 +130,7 @@ export default function NetflixPages() {
       >
         <Grid item>
           <Typography variant="h2" className={classes.title}>
-            Find TV Shows and Movies
+          <img src={NetflixLogo} className={classes.image} alt="Logo" />
           </Typography>
         </Grid>
         <Grid item>
