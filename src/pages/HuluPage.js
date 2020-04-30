@@ -1,13 +1,15 @@
 import { Button, Grid, Typography } from "@material-ui/core";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { apiHost, searchMovies, searchShows } from "../api/huluApi";
-import GuideboxShowsSearchResults from "../components/GuideboxShowsSearchResults";
-import GuideboxMoviesSearchResults from "../components/GuideboxMoviesSearchResults";
 
+import GuideboxMoviesSearchResults from "../components/GuideboxMoviesSearchResults";
+import GuideboxShowsSearchResults from "../components/GuideboxShowsSearchResults";
 import HuluLogo from "../images/hululogo.png";
-import { makeStyles } from "@material-ui/core/styles";
-import { huluTheme } from "../common/categoryThemes";
 import LimitFilter from "../components/LimitFilter";
+import { huluTheme } from "../common/categoryThemes";
+import { makeStyles } from "@material-ui/core/styles";
+
+const MAX_OFFSET = 250;
 
 const useStyles = makeStyles({
   button: {
@@ -39,10 +41,10 @@ export default function HuluPage() {
   const [movies, setMovies] = useState([]);
   const [shows, setShows] = useState([]);
   const [limit, setLimit] = useState(10);
-  const [error, setError] = useState(null);
   const [showingMovies, setShowingMovies] = useState(false);
   const [queryPerformed, setQueryPerformed] = useState(false);
-  const MAX_OFFSET = 250;
+  const classes = useStyles();
+
   useEffect(() => apiHost("http://api-public.guidebox.com/v2"));
 
   const performMovieQuery = async (event) => {
@@ -58,13 +60,14 @@ export default function HuluPage() {
         offset: Math.floor(Math.random() * (MAX_OFFSET - limit)),
         sources: "hulu",
       });
-      setMovies(result.results);
+      setMovies(result.results.sort(() => Math.random() - 0.5));
       setShowingMovies(true);
       setQueryPerformed(true);
     } catch (error) {
-      setError("Sorry, but something went wrong.");
+      window.alert("Something went wrong.");
     }
   };
+
   const performShowQuery = async (event) => {
     event.preventDefault();
 
@@ -75,26 +78,25 @@ export default function HuluPage() {
     try {
       const result = await searchShows({
         limit: limit,
+        offset: Math.floor(Math.random() * (MAX_OFFSET - limit)),
         sources: "hulu",
       });
       setShows(result.results.sort(() => Math.random() - 0.5));
       setShowingMovies(false);
       setQueryPerformed(true);
     } catch (error) {
-      setError("Sorry, but something went wrong.");
+      window.alert("Something went wrong.");
     }
   };
 
-  const classes = useStyles();
-
-  const isValidLimit = (s) =>
-    /^(\d|[1-9]\d|1\d\d|2[0-4]\d|250)$/.test(s);
+  const isValidLimit = (s) => /^(\d|[1-9]\d|1\d\d|2[0-4]\d|250)$/.test(s);
 
   const invalidUserInput = () => {
     if ([limit, movies, shows].every((v) => !v)) {
       window.alert("Please use at least one filter.");
       return true;
     }
+
     if (limit && !isValidLimit(limit)) {
       window.alert("Please select a limit in the range of 0-250");
       return true;
@@ -102,7 +104,6 @@ export default function HuluPage() {
 
     return false;
   };
-
 
   return (
     <div>
@@ -152,7 +153,6 @@ export default function HuluPage() {
           )}
         </>
       </div>
-      {error && <div className="error">{error}</div>}
     </div>
   );
 }
