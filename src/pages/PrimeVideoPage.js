@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
 import { Button, Grid, Typography } from "@material-ui/core";
-import { primeVideoTheme } from "../common/categoryThemes";
-import { makeStyles } from "@material-ui/core/styles";
-import GuideboxShowsSearchResults from "../components/GuideboxShowsSearchResults";
-import GuideboxMoviesSearchResults from "../components/GuideboxMoviesSearchResults";
-
-// import { apiHost, searchMovies, searchShows } from "../api/primeApi";
+import React, { useEffect, useState } from "react";
 import { apiHost, searchMovies, searchShows } from "../mock/mockPrimeVideoData";
-import PrimeLogo from "../images/prime_logo.png";
+
+import GuideboxMoviesSearchResults from "../components/GuideboxMoviesSearchResults";
+import GuideboxShowsSearchResults from "../components/GuideboxShowsSearchResults";
 import LimitFilter from "../components/LimitFilter";
+import PrimeLogo from "../images/prime_logo.png";
+import { makeStyles } from "@material-ui/core/styles";
+import { primeVideoTheme } from "../common/categoryThemes";
 
 const useStyles = makeStyles({
   button: {
