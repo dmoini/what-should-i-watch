@@ -1,6 +1,6 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { apiHost, searchMovies, searchShows } from "../mock/mockPrimeVideoData";
+import { apiHost, searchMovies, searchShows } from "../api/primeApi";
 
 import GuideboxMoviesSearchResults from "../components/GuideboxMoviesSearchResults";
 import GuideboxShowsSearchResults from "../components/GuideboxShowsSearchResults";
