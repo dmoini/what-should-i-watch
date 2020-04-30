@@ -1,7 +1,6 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { apiHost, searchMovies, searchShows } from "../mock/mockNetflixData";
-
+import { apiHost, searchMovies, searchShows } from "../api/netflixApi";
 import GuideboxMoviesSearchResults from "../components/GuideboxMoviesSearchResults";
 import GuideboxShowsSearchResults from "../components/GuideboxShowsSearchResults";
 import LimitFilter from "../components/LimitFilter";
@@ -23,14 +22,21 @@ const useStyles = makeStyles({
     color: netflixTheme.textColor,
     fontSize: 20,
     fontWeight: "bold",
+    margin: "10px",
   },
   grid: {
-    minHeight: "100vh",
-    paddingBottom: "700px",
+    minHeight: "50vh",
+    paddingTop: "50px",
+    paddingBottom: "50px",
   },
   title: {
     color: netflixTheme.backgroundColor,
     fontWeight: "700",
+  },
+  resultTitle: {
+    color: netflixTheme.backgroundColor,
+    fontWeight: "500",
+    titlePosition: "center",
   },
 });
 
@@ -38,9 +44,8 @@ export default function NetflixPages() {
   const [limit, setLimit] = useState(10);
   const [shows, setShows] = useState([]);
   const [movies, setMovies] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState();
   const [showingShowInfo, setShowingShowInfo] = useState(false);
-  const [showingMovieInfo, setShowingMovieInfo] = useState(false);
   const [netflixData, setNetflixData] = useState(false);
 
   useEffect(() => apiHost("http://api-public.guidebox.com/v2"));
@@ -62,7 +67,7 @@ export default function NetflixPages() {
       setShowingShowInfo(true);
       setNetflixData(true);
     } catch (error) {
-      setError("Something went wrong.");
+      window.alert("Something went wrong.");
     }
   };
 
@@ -80,10 +85,10 @@ export default function NetflixPages() {
         sources: "netflix",
       });
       setMovies(result.results);
-      setShowingMovieInfo(true);
+      setShowingShowInfo(false);
       setNetflixData(true);
     } catch (error) {
-      setError("Something went wrong.");
+      window.alert("Something went wrong.");
     }
   };
 
@@ -125,7 +130,7 @@ export default function NetflixPages() {
           <LimitFilter handleChange={(e) => setLimit(e.target.value)} />
         </Grid>
         <Grid item>
-          <Button
+          <Button 
             classes={{ root: classes.button }}
             variant="contained"
             onClick={performShowQuery}
@@ -141,14 +146,21 @@ export default function NetflixPages() {
           </Button>
         </Grid>
       </Grid>
-      <div style={{ paddingBottom: "100px" }}>
+      <div style={{ paddingTop: "100px" }}>
         <>
+        <Typography variant="h3" className={classes.resultTitle}>
+            Shows
+          </Typography>
           {showingShowInfo && netflixData && (
             <GuideboxShowsSearchResults data={shows} />
           )}
         </>
+        &nbsp;
         <>
-          {showingMovieInfo && netflixData && (
+        <Typography variant="h3" className={classes.resultTitle}>
+            Movies
+          </Typography>
+          {!showingShowInfo && netflixData && (
             <GuideboxMoviesSearchResults data={movies} />
           )}
         </>
