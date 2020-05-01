@@ -56,9 +56,13 @@ export default function TmdbSearchResults({ data }) {
             />
             <GridListTileBar
               title={
-                tile.release_date
-                  ? `${tile.title} (${tile.release_date.substring(0, 4)})`
-                  : `${tile.title}`
+                tile.title
+                  ? tile.release_date
+                    ? `${tile.title} (${tile.release_date.substring(0, 4)})`
+                    : `${tile.title}`
+                  : tile.first_air_date
+                  ? `${tile.name} (${tile.first_air_date.substring(0, 4)})`
+                  : `${tile.name}`
               }
               actionIcon={
                 <>
